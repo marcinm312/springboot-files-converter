@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --proxy-base-url https://file-converter-marcinm312.herokuapp.com --port $PORT target/*.war
