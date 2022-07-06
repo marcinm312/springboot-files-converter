@@ -38,6 +38,7 @@ public class WordToPdfConverter {
 		List<PrivateFontPath> fontPaths = new ArrayList<>();
 
 		for (File fontDirectory : fontsDirectories) {
+
 			String fontName = fontDirectory.getName();
 			fontNames.add(fontName);
 			File[] fontFiles = fontDirectory.listFiles();
@@ -55,6 +56,7 @@ public class WordToPdfConverter {
 		pdfParameterList.setDisableLink(true);
 		pdfParameterList.setEmbeddedFontNameList(fontNames);
 		pdfParameterList.setPrivateFontPaths(fontPaths);
+		pdfParameterList.setUsePSCoversion(true);
 	}
 
 	public ResponseEntity<ByteArrayResource> validateAndConvertFile(MultipartFile file) throws IOException {
@@ -91,6 +93,7 @@ public class WordToPdfConverter {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		doc.saveToStream(outputStream, pdfParameterList);
 		outputStream.close();
+		doc.close();
 		log.info("PDF file saved to stream");
 		return outputStream.toByteArray();
 	}
