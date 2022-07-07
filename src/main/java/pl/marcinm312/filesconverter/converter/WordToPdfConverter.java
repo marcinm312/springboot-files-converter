@@ -55,7 +55,7 @@ public class WordToPdfConverter {
 			if (fontFiles != null) {
 				for (File fontFile : fontFiles) {
 					fontPaths.add(new PrivateFontPath(fontName, fontFile.getPath()));
-					log.info("Loaded font: {}. Path: {}", fontName, fontFile.getPath());
+					log.info("Loaded font: \"{}\". Path: \"{}\"", fontName, fontFile.getPath());
 				}
 			}
 		}
