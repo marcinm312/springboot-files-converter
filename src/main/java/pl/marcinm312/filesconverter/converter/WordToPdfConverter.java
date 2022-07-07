@@ -16,6 +16,7 @@ import pl.marcinm312.filesconverter.utils.FileUtils;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -27,11 +28,19 @@ public class WordToPdfConverter {
 
 	public WordToPdfConverter(ResourcePatternResolver resourceResolver) throws IOException {
 
-		Resource[] resources = resourceResolver.getResources("classpath:fonts/*");
-
+		Resource[] resources = resourceResolver.getResources("classpath:embeddedFonts/*");
 		List<File> fontsDirectories = new ArrayList<>();
-		for (Resource resource : resources) {
-			fontsDirectories.add(resource.getFile());
+
+		if (resources.length > 0) {
+			for (Resource resource : resources) {
+				fontsDirectories.add(resource.getFile());
+			}
+		} else {
+			File fontsMainDirectory = new File("embeddedFonts");
+			File[] directoriesArray = fontsMainDirectory.listFiles(File::isDirectory);
+			if (directoriesArray != null) {
+				fontsDirectories = Arrays.asList(directoriesArray);
+			}
 		}
 
 		List<String> fontNames = new ArrayList<>();
