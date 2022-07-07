@@ -62,7 +62,7 @@ public class WordToPdfConverter {
 
 		pdfParameterList = new ToPdfParameterList();
 		pdfParameterList.isEmbeddedAllFonts(true);
-		pdfParameterList.setDisableLink(true);
+		pdfParameterList.setDisableLink(false);
 		pdfParameterList.setEmbeddedFontNameList(fontNames);
 		pdfParameterList.setPrivateFontPaths(fontPaths);
 		pdfParameterList.setUsePSCoversion(true);
