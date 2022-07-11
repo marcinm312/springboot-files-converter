@@ -66,6 +66,7 @@ public class WordToPdfConverter {
 		pdfParameterList.setEmbeddedFontNameList(fontNames);
 		pdfParameterList.setPrivateFontPaths(fontPaths);
 		pdfParameterList.setUsePSCoversion(true);
+		pdfParameterList.isEmbeddedAllFonts(true);
 	}
 
 	public ResponseEntity<ByteArrayResource> validateAndConvertFile(MultipartFile file) throws IOException {
