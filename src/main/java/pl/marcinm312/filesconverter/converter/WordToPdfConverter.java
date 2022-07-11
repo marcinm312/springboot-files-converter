@@ -98,6 +98,8 @@ public class WordToPdfConverter {
 		doc.loadFromStream(inputStream, FileFormat.Auto);
 		log.info("Input stream loaded");
 		doc.setJPEGQuality(100);
+		doc.setEmbedFontsInFile(true);
+		doc.setEmbedSystemFonts(true);
 
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		doc.saveToStream(outputStream, pdfParameterList);
