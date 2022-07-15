@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.converter.WordToPdfConverter;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/api")
 public class ApiController {
@@ -24,7 +22,7 @@ public class ApiController {
 	}
 
 	@PostMapping("/convertWordToPdf")
-	public ResponseEntity<ByteArrayResource> convertWordToPdf(@RequestParam MultipartFile file) throws IOException {
+	public ResponseEntity<ByteArrayResource> convertWordToPdf(@RequestParam MultipartFile file) {
 
 		return wordToPdfConverter.validateAndConvertFile(file);
 	}

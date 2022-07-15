@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.exception.BadRequestException;
+import pl.marcinm312.filesconverter.exception.FileException;
 import pl.marcinm312.filesconverter.utils.FileUtils;
 
 import java.io.*;
@@ -68,7 +69,7 @@ public class WordToPdfConverter {
 		pdfParameterList.setUsePSCoversion(true);
 	}
 
-	public ResponseEntity<ByteArrayResource> validateAndConvertFile(MultipartFile file) throws IOException {
+	public ResponseEntity<ByteArrayResource> validateAndConvertFile(MultipartFile file) {
 
 		if (file == null || file.isEmpty()) {
 			log.error("No file selected");
@@ -83,26 +84,30 @@ public class WordToPdfConverter {
 			throw new BadRequestException("Nieprawidłowy format pliku");
 		}
 
-		InputStream inputStream = file.getInputStream();
-		log.info("Start to convert file: {}", fileName);
-		byte[] convertedFile = convertFile(inputStream);
-		String newFileName = getPdfFileName(fileName);
-		log.info("Converted file: {}", newFileName);
+		Document doc = new Document();
+		try (InputStream inputStream = file.getInputStream();
+			 ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-		return FileUtils.generateResponseWithFile(convertedFile, newFileName);
+			log.info("Start to convert file: {}", fileName);
+			byte[] convertedFile = convertFile(inputStream, outputStream, doc);
+			String newFileName = getPdfFileName(fileName);
+			log.info("Converted file: {}", newFileName);
+			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
+
+		} catch (Exception e) {
+			throw new FileException(e.getMessage());
+		} finally {
+			doc.close();
+		}
 	}
 
-	private byte[] convertFile(InputStream inputStream) throws IOException {
+	private byte[] convertFile(InputStream inputStream, ByteArrayOutputStream outputStream, Document doc) {
 
-		Document doc = new Document();
 		doc.loadFromStream(inputStream, FileFormat.Auto);
 		log.info("Input stream loaded");
 		doc.setJPEGQuality(100);
 
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		doc.saveToStream(outputStream, pdfParameterList);
-		outputStream.close();
-		doc.close();
 		log.info("PDF file saved to stream");
 		return outputStream.toByteArray();
 	}
