@@ -1,6 +1,6 @@
 package pl.marcinm312.filesconverter.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,21 +9,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.converter.WordToPdfConverter;
+import pl.marcinm312.filesconverter.exception.FileException;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
-public class ApiController {
+public class WordToPdfApiController {
 
 	private final WordToPdfConverter wordToPdfConverter;
 
-	@Autowired
-	public ApiController(WordToPdfConverter wordToPdfConverter) {
-		this.wordToPdfConverter = wordToPdfConverter;
-	}
-
 	@PostMapping("/convertWordToPdf")
-	public ResponseEntity<ByteArrayResource> convertWordToPdf(@RequestParam MultipartFile file) {
+	public ResponseEntity<ByteArrayResource> convertWordToPdf(@RequestParam MultipartFile file) throws FileException {
 
-		return wordToPdfConverter.validateAndConvertFile(file);
+		return wordToPdfConverter.executeConversion(file);
 	}
 }

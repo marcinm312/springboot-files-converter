@@ -4,7 +4,7 @@ import com.spire.doc.Document;
 import com.spire.doc.FileFormat;
 import com.spire.doc.PrivateFontPath;
 import com.spire.doc.ToPdfParameterList;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -20,12 +20,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Component
 public class WordToPdfConverter {
 
 	private final ToPdfParameterList pdfParameterList;
-
-	private final org.slf4j.Logger log = LoggerFactory.getLogger(getClass());
 
 	public WordToPdfConverter(ResourcePatternResolver resourceResolver) throws IOException {
 
@@ -69,7 +68,13 @@ public class WordToPdfConverter {
 		pdfParameterList.setUsePSCoversion(true);
 	}
 
-	public ResponseEntity<ByteArrayResource> validateAndConvertFile(MultipartFile file) {
+	public ResponseEntity<ByteArrayResource> executeConversion(MultipartFile file) throws FileException {
+
+		validateFile(file);
+		return convertMultipartFile(file);
+	}
+
+	private void validateFile(MultipartFile file) {
 
 		if (file == null || file.isEmpty()) {
 			log.error("No file selected");
@@ -77,19 +82,24 @@ public class WordToPdfConverter {
 		}
 
 		String fileName = FileUtils.getFileName(file);
-		log.info("Start to load file: {}", fileName);
 
 		if (!(fileName.endsWith(".doc") || fileName.endsWith(".docx"))) {
 			log.error("Incorrect file format");
 			throw new BadRequestException("Nieprawidłowy format pliku");
 		}
+	}
+
+	private ResponseEntity<ByteArrayResource> convertMultipartFile(MultipartFile file) throws FileException {
+
+		String fileName = FileUtils.getFileName(file);
+		log.info("Start to load file: {}", fileName);
 
 		Document doc = new Document();
 		try (InputStream inputStream = file.getInputStream();
 			 ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
 			log.info("Start to convert file: {}", fileName);
-			byte[] convertedFile = convertFile(inputStream, outputStream, doc);
+			byte[] convertedFile = processInputStream(inputStream, outputStream, doc);
 			String newFileName = getPdfFileName(fileName);
 			log.info("Converted file: {}", newFileName);
 			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
@@ -101,7 +111,7 @@ public class WordToPdfConverter {
 		}
 	}
 
-	private byte[] convertFile(InputStream inputStream, ByteArrayOutputStream outputStream, Document doc) {
+	private byte[] processInputStream(InputStream inputStream, ByteArrayOutputStream outputStream, Document doc) {
 
 		doc.loadFromStream(inputStream, FileFormat.Auto);
 		log.info("Input stream loaded");
@@ -113,6 +123,7 @@ public class WordToPdfConverter {
 	}
 
 	private String getPdfFileName(String wordFileName) {
+
 		String[] splitFileName = wordFileName.split("\\.");
 		return splitFileName[0].replace("—", "-") + ".pdf";
 	}

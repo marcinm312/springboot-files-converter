@@ -1,18 +1,18 @@
 package pl.marcinm312.filesconverter.utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileUtils {
 
-	private FileUtils() {
-
-	}
-
 	public static ResponseEntity<ByteArrayResource> generateResponseWithFile(byte[] bytes, String fileName) {
+
 		ByteArrayResource resource = new ByteArrayResource(bytes);
 		return ResponseEntity.ok().contentLength(bytes.length)
 				.contentType(MediaType.parseMediaType("application/octet-stream"))
@@ -21,6 +21,7 @@ public class FileUtils {
 	}
 
 	public static String getFileName(MultipartFile multipartFile) {
+
 		String fileName = multipartFile.getOriginalFilename();
 		if (fileName == null) {
 			fileName = "";
