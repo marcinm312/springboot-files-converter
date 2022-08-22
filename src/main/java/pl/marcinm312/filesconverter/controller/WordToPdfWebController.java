@@ -11,32 +11,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.converter.WordToPdfConverter;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-@RequestMapping("")
+@RequestMapping("/app")
 public class WordToPdfWebController {
 
-	private static final String MAIN_PAGE = "mainPage";
+	private static final String CONVERTER_PAGE = "converterPage";
 	private static final String RESULT = "result";
 
 	private final WordToPdfConverter wordToPdfConverter;
 
-	@GetMapping
-	public String getMainPage(Model model) {
+	@GetMapping("/wordToPdf")
+	public String getConverterPage(Model model) {
 		model.addAttribute(RESULT, "");
-		return MAIN_PAGE;
+		return CONVERTER_PAGE;
 	}
 
-	@PostMapping("/convertWordToPdf")
-	public Object convertWordToPdf(@RequestParam("file") MultipartFile file, Model model) {
+	@PostMapping("/wordToPdf")
+	public Object convertWordToPdf(@RequestParam("file") MultipartFile file, Model model, HttpServletResponse response) {
 
 		try {
 			return wordToPdfConverter.executeConversion(file);
 		} catch (Exception e) {
 			log.error("Error converting the file: {}", e.getMessage());
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			model.addAttribute(RESULT, e.getMessage());
-			return MAIN_PAGE;
+			return CONVERTER_PAGE;
 		}
 	}
 }

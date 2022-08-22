@@ -16,14 +16,14 @@
 </head>
 <body>
 <div class="wrapper">
-    <div>
-        <h1>Word -> PDF</h1>
-        <form:form method="post" action="/convertWordToPdf" enctype="multipart/form-data">
-            <input type="file" name="file" accept=".doc, .docx" required/>
-            <input type="submit" class="btn btn-primary" value="Konwertuj do PDF!"/>
-        </form:form>
-        <p class="message">${result}</p>
-    </div>
+        <h1>Wybierz rodzaj konwersji</h1>
+        <div class="menu">
+                <button class="btn btn-primary"
+                        onclick="window.location.href = 'app/wordToPdf'">Word -&gt; PDF
+                </button>
+                <button class="btn btn-primary">Tu będzie inny konwerter
+                </button>
+        </div>
 </div>
 </body>
 </html>

@@ -15,6 +15,11 @@ p.message {
     margin-bottom: 20px;
 }
 
+div.menu * {
+    display: block;
+    margin: 5px;
+}
+
 @media (max-width: 414px) {
     div.wrapper {
         margin: 15px;

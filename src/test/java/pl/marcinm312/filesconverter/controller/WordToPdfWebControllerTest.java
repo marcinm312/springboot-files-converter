@@ -29,18 +29,18 @@ class WordToPdfWebControllerTest {
 	private MockMvc mockMvc;
 
 	@Test
-	void getMainPage_simpleCase_success() throws Exception {
+	void getConverterPage_simpleCase_success() throws Exception {
 
-		this.mockMvc.perform(get("/"))
+		this.mockMvc.perform(get("/app/wordToPdf/"))
 				.andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(view().name("mainPage"));
+				.andExpect(view().name("converterPage"));
 	}
 
 	@Test
 	void convertWordToPdf_postWithoutFile_badRequest() throws Exception {
 
-		this.mockMvc.perform(post("/convertWordToPdf"))
+		this.mockMvc.perform(post("/app/wordToPdf/"))
 				.andDo(print())
 				.andExpect(status().isBadRequest())
 				.andExpect(view().name("multipartException"));
@@ -56,7 +56,7 @@ class WordToPdfWebControllerTest {
 		MockMultipartFile multipartFile = new MockMultipartFile("file", file.getName(), null, bytes);
 
 		this.mockMvc.perform(
-						multipart("/convertWordToPdf")
+						multipart("/app/wordToPdf/")
 								.file(multipartFile))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM));
@@ -79,11 +79,11 @@ class WordToPdfWebControllerTest {
 		MockMultipartFile multipartFile = new MockMultipartFile("file", file.getName(), null, bytes);
 
 		this.mockMvc.perform(
-						multipart("/convertWordToPdf")
+						multipart("/app/wordToPdf/")
 								.file(multipartFile))
 				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(view().name("mainPage"))
+				.andExpect(status().isBadRequest())
+				.andExpect(view().name("converterPage"))
 				.andExpect(model().attribute("result", "Nieprawidłowy format pliku"));
 	}
 
@@ -91,7 +91,7 @@ class WordToPdfWebControllerTest {
 	void convertWordToPdf_multipartWithoutFile_errorMessage() throws Exception {
 
 		this.mockMvc.perform(
-						multipart("/convertWordToPdf"))
+						multipart("/app/wordToPdf/"))
 				.andDo(print())
 				.andExpect(status().isBadRequest());
 	}
@@ -100,10 +100,10 @@ class WordToPdfWebControllerTest {
 	void convertWordToPdf_multipartWithUnselectedFile_errorMessage() throws Exception {
 
 		this.mockMvc.perform(
-						multipart("/convertWordToPdf").file("file", new byte[0]))
+						multipart("/app/wordToPdf/").file("file", new byte[0]))
 				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(view().name("mainPage"))
+				.andExpect(status().isBadRequest())
+				.andExpect(view().name("converterPage"))
 				.andExpect(model().attribute("result", "Nie wybrano pliku"));
 	}
 }

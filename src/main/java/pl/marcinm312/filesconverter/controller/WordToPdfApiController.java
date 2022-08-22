@@ -18,7 +18,7 @@ public class WordToPdfApiController {
 
 	private final WordToPdfConverter wordToPdfConverter;
 
-	@PostMapping("/convertWordToPdf")
+	@PostMapping("/wordToPdf")
 	public ResponseEntity<ByteArrayResource> convertWordToPdf(@RequestParam MultipartFile file) throws FileException {
 
 		return wordToPdfConverter.executeConversion(file);

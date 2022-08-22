@@ -34,7 +34,7 @@ class WordToPdfApiControllerTest {
 	@Test
 	void convertWordToPdf_postWithoutFile_badRequest() throws Exception {
 
-		this.mockMvc.perform(post("/api/convertWordToPdf"))
+		this.mockMvc.perform(post("/api/wordToPdf"))
 				.andDo(print())
 				.andExpect(status().isBadRequest())
 				.andExpect(view().name("multipartException"));
@@ -50,7 +50,7 @@ class WordToPdfApiControllerTest {
 		MockMultipartFile multipartFile = new MockMultipartFile("file", file.getName(), null, bytes);
 
 		this.mockMvc.perform(
-						multipart("/api/convertWordToPdf")
+						multipart("/api/wordToPdf")
 								.file(multipartFile))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM));
@@ -73,7 +73,7 @@ class WordToPdfApiControllerTest {
 		MockMultipartFile multipartFile = new MockMultipartFile("file", file.getName(), null, bytes);
 
 		String receivedErrorMessage = Objects.requireNonNull(this.mockMvc.perform(
-						multipart("/api/convertWordToPdf")
+						multipart("/api/wordToPdf")
 								.file(multipartFile))
 				.andDo(print())
 				.andExpect(status().isBadRequest())
@@ -86,7 +86,7 @@ class WordToPdfApiControllerTest {
 	void convertWordToPdf_multipartWithoutFile_errorMessage() throws Exception {
 
 		this.mockMvc.perform(
-						multipart("/api/convertWordToPdf"))
+						multipart("/api/wordToPdf"))
 				.andDo(print())
 				.andExpect(status().isBadRequest());
 	}
@@ -95,7 +95,7 @@ class WordToPdfApiControllerTest {
 	void convertWordToPdf_multipartWithUnselectedFile_errorMessage() throws Exception {
 
 		String receivedErrorMessage = Objects.requireNonNull(this.mockMvc.perform(
-						multipart("/api/convertWordToPdf").file("file", new byte[0]))
+						multipart("/api/wordToPdf").file("file", new byte[0]))
 				.andDo(print())
 				.andExpect(status().isBadRequest())
 				.andReturn().getResolvedException()).getMessage();

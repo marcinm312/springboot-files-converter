@@ -12,12 +12,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
-    <title>Przekroczono dozwolony rozmiar pliku</title>
+    <title>Konwerter plików</title>
 </head>
 <body>
 <div class="wrapper">
-    <p class="message">${result}</p>
-    <button class="btn btn-primary" onclick="window.location.href = '../..'">Wróć</button>
+        <h1>Word -> PDF</h1>
+        <form:form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".doc, .docx" required/>
+            <input type="submit" class="btn btn-success" value="Konwertuj do PDF!"/>
+        </form:form>
+        <p class="message">${result}</p>
+        <button type="button" class="btn btn-danger" onclick="window.location.href = '../..'">Anuluj</button>
 </div>
 </body>
 </html>
