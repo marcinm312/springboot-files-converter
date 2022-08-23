@@ -16,6 +16,7 @@
 </head>
 <body>
 <div class="wrapper">
+    <h1>Przekroczono dozwolony rozmiar pliku</h1>
     <p class="message">${result}</p>
     <button class="btn btn-primary" onclick="window.location.href = '../..'">Wróć</button>
 </div>

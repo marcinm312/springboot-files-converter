@@ -26,7 +26,9 @@ public class WordToPdfWebController {
 
 	@GetMapping("/wordToPdf")
 	public String getConverterPage(Model model) {
+
 		model.addAttribute(RESULT, "");
+		prepareConverterPage(model);
 		return CONVERTER_PAGE;
 	}
 
@@ -39,7 +41,13 @@ public class WordToPdfWebController {
 			log.error("Error converting the file: {}", e.getMessage());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			model.addAttribute(RESULT, e.getMessage());
+			prepareConverterPage(model);
 			return CONVERTER_PAGE;
 		}
+	}
+
+	private void prepareConverterPage(Model model) {
+		model.addAttribute("title", "Word -> PDF");
+		model.addAttribute("acceptedFileTypes", ".doc, .docx");
 	}
 }

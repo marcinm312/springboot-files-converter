@@ -12,14 +12,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
-    <title>Konwerter plików</title>
+    <title>${title}</title>
 </head>
 <body>
 <div class="wrapper">
-        <h1>Word -> PDF</h1>
+        <h1>${title}</h1>
         <form:form method="post" enctype="multipart/form-data">
-            <input type="file" name="file" accept=".doc, .docx" required/>
-            <input type="submit" class="btn btn-success" value="Konwertuj do PDF!"/>
+            <input type="file" name="file" accept="${acceptedFileTypes}" required/>
+            <input type="submit" class="btn btn-success" value="Konwertuj!"/>
         </form:form>
         <p class="message">${result}</p>
         <button type="button" class="btn btn-danger" onclick="window.location.href = '../..'">Anuluj</button>
