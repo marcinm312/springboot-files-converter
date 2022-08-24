@@ -22,7 +22,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class WordToPdfConverter {
+public class WordToPdfConverter implements Converter {
 
 	private final ToPdfParameterList pdfParameterList;
 
