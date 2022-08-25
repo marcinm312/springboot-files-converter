@@ -1,12 +1,12 @@
-package pl.marcinm312.filesconverter.controller;
+package pl.marcinm312.filesconverter.shared.controller;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import pl.marcinm312.filesconverter.converter.Converter;
-import pl.marcinm312.filesconverter.exception.FileException;
+import pl.marcinm312.filesconverter.shared.Converter;
+import pl.marcinm312.filesconverter.shared.exception.FileException;
 
 public interface AbstractConverterApiController {
 

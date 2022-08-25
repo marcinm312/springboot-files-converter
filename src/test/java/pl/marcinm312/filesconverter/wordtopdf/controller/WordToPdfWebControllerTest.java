@@ -1,4 +1,4 @@
-package pl.marcinm312.filesconverter.controller;
+package pl.marcinm312.filesconverter.wordtopdf.controller;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

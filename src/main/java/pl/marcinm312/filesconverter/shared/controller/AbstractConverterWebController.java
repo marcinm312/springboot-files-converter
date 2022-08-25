@@ -1,4 +1,4 @@
-package pl.marcinm312.filesconverter.controller;
+package pl.marcinm312.filesconverter.shared.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import pl.marcinm312.filesconverter.converter.Converter;
+import pl.marcinm312.filesconverter.shared.Converter;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,9 +16,9 @@ public abstract class AbstractConverterWebController {
 	private static final String RESULT = "result";
 	private static final String CONVERTER_PAGE = "converterPage";
 
-	abstract Converter getConverter();
-	abstract String getPageTitle();
-	abstract String getAcceptedFileTypes();
+	protected abstract Converter getConverter();
+	protected abstract String getPageTitle();
+	protected abstract String getAcceptedFileTypes();
 
 
 	@GetMapping

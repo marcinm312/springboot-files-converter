@@ -1,4 +1,4 @@
-package pl.marcinm312.filesconverter.exception;
+package pl.marcinm312.filesconverter.shared.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

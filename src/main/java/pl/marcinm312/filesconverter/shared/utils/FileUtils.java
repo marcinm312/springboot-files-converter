@@ -1,4 +1,4 @@
-package pl.marcinm312.filesconverter.utils;
+package pl.marcinm312.filesconverter.shared.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

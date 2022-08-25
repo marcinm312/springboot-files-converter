@@ -1,4 +1,4 @@
-package pl.marcinm312.filesconverter.config;
+package pl.marcinm312.filesconverter.shared.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;

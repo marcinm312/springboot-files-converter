@@ -1,4 +1,4 @@
-package pl.marcinm312.filesconverter.controller;
+package pl.marcinm312.filesconverter.shared.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

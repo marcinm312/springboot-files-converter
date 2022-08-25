@@ -1,4 +1,4 @@
-package pl.marcinm312.filesconverter.converter;
+package pl.marcinm312.filesconverter.wordtopdf;
 
 import com.spire.doc.Document;
 import com.spire.doc.FileFormat;
@@ -11,9 +11,10 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import pl.marcinm312.filesconverter.exception.BadRequestException;
-import pl.marcinm312.filesconverter.exception.FileException;
-import pl.marcinm312.filesconverter.utils.FileUtils;
+import pl.marcinm312.filesconverter.shared.Converter;
+import pl.marcinm312.filesconverter.shared.exception.BadRequestException;
+import pl.marcinm312.filesconverter.shared.exception.FileException;
+import pl.marcinm312.filesconverter.shared.utils.FileUtils;
 
 import java.io.*;
 import java.util.ArrayList;
