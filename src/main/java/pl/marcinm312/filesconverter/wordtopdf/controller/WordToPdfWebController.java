@@ -19,15 +19,15 @@ public class WordToPdfWebController extends AbstractConverterWebController {
 	private final Converter wordToPdfConverter;
 
 
-	public Converter getConverter() {
+	protected Converter getConverter() {
 		return wordToPdfConverter;
 	}
 
-	public String getPageTitle() {
+	protected String getPageTitle() {
 		return PAGE_TITLE;
 	}
 
-	public String getAcceptedFileTypes() {
+	protected String getAcceptedFileTypes() {
 		return ACCEPTED_FILE_TYPES;
 	}
 }
