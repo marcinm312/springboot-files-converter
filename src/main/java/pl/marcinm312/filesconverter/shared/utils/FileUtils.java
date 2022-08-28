@@ -7,6 +7,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+import pl.marcinm312.filesconverter.shared.exception.FileException;
+import pl.marcinm312.filesconverter.shared.model.FileToZip;
+
+import java.io.ByteArrayOutputStream;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileUtils {
@@ -27,5 +34,25 @@ public class FileUtils {
 			fileName = "";
 		}
 		return fileName;
+	}
+
+	public static byte[] createZipFile(List<FileToZip> filesToZip) throws FileException {
+
+		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			 ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
+
+			for (FileToZip fileToZip : filesToZip) {
+				ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+				zipOutputStream.putNextEntry(zipEntry);
+				zipOutputStream.write(fileToZip.getBytes());
+				zipOutputStream.closeEntry();
+			}
+
+			zipOutputStream.finish();
+			return byteArrayOutputStream.toByteArray();
+
+		} catch (Exception e) {
+			throw new FileException(e.getMessage());
+		}
 	}
 }
