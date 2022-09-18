@@ -106,6 +106,7 @@ public class WordToPdfConverter implements Converter {
 			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
 
 		} catch (Exception e) {
+			log.error("Error while converting Word file to PDF: {}", e.getMessage());
 			throw new FileException(e.getMessage());
 		} finally {
 			doc.close();

@@ -2,6 +2,7 @@ package pl.marcinm312.filesconverter.shared.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,6 +17,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class FileUtils {
 
 	public static ResponseEntity<ByteArrayResource> generateResponseWithFile(byte[] bytes, String fileName) {
@@ -52,6 +54,7 @@ public class FileUtils {
 			return byteArrayOutputStream.toByteArray();
 
 		} catch (Exception e) {
+			log.error("Error while generating ZIP file: {}", e.getMessage());
 			throw new FileException(e.getMessage());
 		}
 	}
