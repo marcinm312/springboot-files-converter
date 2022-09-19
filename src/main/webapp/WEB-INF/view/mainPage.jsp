@@ -21,7 +21,8 @@
                 <button class="btn btn-primary"
                         onclick="window.location.href = 'app/wordToPdf'">Word -&gt; PDF
                 </button>
-                <button class="btn btn-primary">Tu będzie inny konwerter
+                <button class="btn btn-primary"
+                        onclick="window.location.href = 'app/pdfToPng'">PDF -&gt; PNG
                 </button>
         </div>
 </div>

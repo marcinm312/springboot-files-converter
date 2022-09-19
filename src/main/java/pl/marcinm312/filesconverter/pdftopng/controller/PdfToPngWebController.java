@@ -1,4 +1,4 @@
-package pl.marcinm312.filesconverter.wordtopdf.controller;
+package pl.marcinm312.filesconverter.pdftopng.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,18 +10,17 @@ import pl.marcinm312.filesconverter.shared.controller.AbstractConverterWebContro
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-@RequestMapping("/app/wordToPdf")
-public class WordToPdfWebController extends AbstractConverterWebController {
+@RequestMapping("/app/pdfToPng")
+public class PdfToPngWebController extends AbstractConverterWebController {
 
-	private static final String PAGE_TITLE = "Word -> PDF";
-	private static final String ACCEPTED_FILE_TYPES = ".doc, .docx";
+	private static final String PAGE_TITLE = "PDF -> PNG";
+	private static final String ACCEPTED_FILE_TYPES = ".pdf";
 
-	private final Converter wordToPdfConverter;
-
+	private final Converter pdfToPngConverter;
 
 	@Override
 	protected Converter getConverter() {
-		return wordToPdfConverter;
+		return pdfToPngConverter;
 	}
 
 	@Override

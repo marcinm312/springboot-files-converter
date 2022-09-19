@@ -1,4 +1,4 @@
-package pl.marcinm312.filesconverter.wordtopdf.controller;
+package pl.marcinm312.filesconverter.pdftopng.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,13 +8,13 @@ import pl.marcinm312.filesconverter.shared.controller.AbstractConverterApiContro
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/wordToPdf")
-public class WordToPdfApiController implements AbstractConverterApiController {
+@RequestMapping("/api/pdfToPng")
+public class PdfToPngApiController implements AbstractConverterApiController {
 
-	private final Converter wordToPdfConverter;
+	private final Converter pdfToPngConverter;
 
 	@Override
 	public Converter getConverter() {
-		return wordToPdfConverter;
+		return pdfToPngConverter;
 	}
 }

@@ -40,22 +40,32 @@ public class FileUtils {
 
 	public static byte[] createZipFile(List<FileToZip> filesToZip) throws FileException {
 
+		log.info("Start to create ZIP file");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			 ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
 
 			for (FileToZip fileToZip : filesToZip) {
-				ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+				String fileName = fileToZip.getName();
+				ZipEntry zipEntry = new ZipEntry(fileName);
 				zipOutputStream.putNextEntry(zipEntry);
 				zipOutputStream.write(fileToZip.getBytes());
 				zipOutputStream.closeEntry();
+				log.info("File {} added to ZIP file", fileName);
 			}
 
 			zipOutputStream.finish();
+			log.info("ZIP file created");
 			return byteArrayOutputStream.toByteArray();
 
 		} catch (Exception e) {
 			log.error("Error while generating ZIP file: {}", e.getMessage());
 			throw new FileException(e.getMessage());
 		}
+	}
+
+	public static String getFileNameWithNewExtension(String oldFileName, String newExtension) {
+
+		String[] splitFileName = oldFileName.split("\\.");
+		return splitFileName[0].replace("—", "-") + "." + newExtension;
 	}
 }

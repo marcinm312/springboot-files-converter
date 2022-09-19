@@ -69,6 +69,7 @@ public class WordToPdfConverter implements Converter {
 		pdfParameterList.setUsePSCoversion(true);
 	}
 
+	@Override
 	public ResponseEntity<ByteArrayResource> executeConversion(MultipartFile file) throws FileException {
 
 		validateFile(file);
@@ -82,7 +83,7 @@ public class WordToPdfConverter implements Converter {
 			throw new BadRequestException("Nie wybrano pliku");
 		}
 
-		String fileName = FileUtils.getFileName(file);
+		String fileName = FileUtils.getFileName(file).toLowerCase();
 
 		if (!(fileName.endsWith(".doc") || fileName.endsWith(".docx"))) {
 			log.error("Incorrect file format");
@@ -101,7 +102,7 @@ public class WordToPdfConverter implements Converter {
 
 			log.info("Start to convert file: {}", fileName);
 			byte[] convertedFile = processInputStream(inputStream, outputStream, doc);
-			String newFileName = getPdfFileName(fileName);
+			String newFileName = FileUtils.getFileNameWithNewExtension(fileName, "pdf");
 			log.info("Converted file: {}", newFileName);
 			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
 
@@ -122,11 +123,5 @@ public class WordToPdfConverter implements Converter {
 		doc.saveToStream(outputStream, pdfParameterList);
 		log.info("PDF file saved to stream");
 		return outputStream.toByteArray();
-	}
-
-	private String getPdfFileName(String wordFileName) {
-
-		String[] splitFileName = wordFileName.split("\\.");
-		return splitFileName[0].replace("—", "-") + ".pdf";
 	}
 }
