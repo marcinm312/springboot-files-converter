@@ -32,7 +32,7 @@ class WordToPdfApiControllerTest {
 	private MockMvc mockMvc;
 
 	@Test
-	void convertWordToPdf_postWithoutFile_badRequest() throws Exception {
+	void convertMultipartFile_postWithoutFile_badRequest() throws Exception {
 
 		this.mockMvc.perform(post("/api/wordToPdf"))
 				.andDo(print())
@@ -42,7 +42,7 @@ class WordToPdfApiControllerTest {
 
 	@ParameterizedTest(name = "{index} ''{1}''")
 	@MethodSource("examplesOfGoodFiles")
-	void convertWordToPdf_correctFiles_fileConverted(String fileName, String nameOfTestCase) throws Exception {
+	void convertMultipartFile_correctFiles_fileConverted(String fileName, String nameOfTestCase) throws Exception {
 
 		String path = "testfiles" + FileSystems.getDefault().getSeparator() + fileName;
 		byte[] bytes = Files.readAllBytes(Paths.get(path));
@@ -59,13 +59,13 @@ class WordToPdfApiControllerTest {
 	private static Stream<Arguments> examplesOfGoodFiles() {
 
 		return Stream.of(
-				Arguments.of("Small_file.docx", "convertWordToPdf_smallDocxFile_fileConverted"),
-				Arguments.of("Small_file.doc", "convertWordToPdf_smallDocFile_fileConverted")
+				Arguments.of("Small_file.docx", "convertMultipartFile_smallDocxFile_fileConverted"),
+				Arguments.of("Small_file.doc", "convertMultipartFile_smallDocFile_fileConverted")
 		);
 	}
 
 	@Test
-	void convertWordToPdf_incorrectFileFormat_errorMessage() throws Exception {
+	void convertMultipartFile_incorrectFileFormat_errorMessage() throws Exception {
 
 		String path = "testfiles" + FileSystems.getDefault().getSeparator() + "Incorrect.webp";
 		byte[] bytes = Files.readAllBytes(Paths.get(path));
@@ -83,7 +83,7 @@ class WordToPdfApiControllerTest {
 	}
 
 	@Test
-	void convertWordToPdf_multipartWithoutFile_errorMessage() throws Exception {
+	void convertMultipartFile_multipartWithoutFile_errorMessage() throws Exception {
 
 		this.mockMvc.perform(
 						multipart("/api/wordToPdf"))
@@ -92,7 +92,7 @@ class WordToPdfApiControllerTest {
 	}
 
 	@Test
-	void convertWordToPdf_multipartWithUnselectedFile_errorMessage() throws Exception {
+	void convertMultipartFile_multipartWithUnselectedFile_errorMessage() throws Exception {
 
 		String receivedErrorMessage = Objects.requireNonNull(this.mockMvc.perform(
 						multipart("/api/wordToPdf").file("file", new byte[0]))
