@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.shared.exception.FileException;
-import pl.marcinm312.filesconverter.shared.model.ZipFile;
+import pl.marcinm312.filesconverter.shared.model.FileData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -41,17 +41,17 @@ public class FileUtils {
 		return fileName;
 	}
 
-	public static byte[] createZipFile(List<ZipFile> filesToZip) throws FileException {
+	public static byte[] createZipFile(List<FileData> filesToZip) throws FileException {
 
 		log.info("Start to create ZIP file");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			 ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
 
-			for (ZipFile zipFile : filesToZip) {
-				String fileName = zipFile.getName();
+			for (FileData fileData : filesToZip) {
+				String fileName = fileData.getName();
 				ZipEntry zipEntry = new ZipEntry(fileName);
 				zipOutputStream.putNextEntry(zipEntry);
-				zipOutputStream.write(zipFile.getBytes());
+				zipOutputStream.write(fileData.getBytes());
 				zipOutputStream.closeEntry();
 				log.info("File {} added to ZIP file", fileName);
 			}
@@ -66,13 +66,13 @@ public class FileUtils {
 		}
 	}
 
-	public static List<ZipFile> readZipFile(MultipartFile file) throws FileException {
+	public static List<FileData> readZipFile(MultipartFile file) throws FileException {
 
 		log.info("Start to read ZIP file");
 		try (InputStream inputStream = file.getInputStream();
 			 ZipInputStream zis = new ZipInputStream(inputStream)) {
 
-			List<ZipFile> zipFiles = new ArrayList<>();
+			List<FileData> fileDataList = new ArrayList<>();
 
 			ZipEntry zipEntry;
 			while ((zipEntry = zis.getNextEntry()) != null) {
@@ -83,11 +83,11 @@ public class FileUtils {
 				String fileName = zipEntry.getName();
 				byte[] bytes = zis.readAllBytes();
 
-				zipFiles.add(new ZipFile(fileName, bytes));
+				fileDataList.add(new FileData(fileName, bytes));
 				log.info("Entry with file {} added to list", fileName);
 			}
 			log.info("ZIP file read");
-			return zipFiles;
+			return fileDataList;
 
 		} catch (Exception e) {
 			log.error("Error while reading ZIP file: {}", e.getMessage());

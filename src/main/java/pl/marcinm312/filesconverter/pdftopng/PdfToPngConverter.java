@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.shared.Converter;
 import pl.marcinm312.filesconverter.shared.exception.BadRequestException;
 import pl.marcinm312.filesconverter.shared.exception.FileException;
-import pl.marcinm312.filesconverter.shared.model.ZipFile;
+import pl.marcinm312.filesconverter.shared.model.FileData;
 import pl.marcinm312.filesconverter.shared.utils.FileUtils;
 
 import javax.imageio.ImageIO;
@@ -42,7 +42,7 @@ public class PdfToPngConverter implements Converter {
 			 PDDocument document = PDDocument.load(inputStream)) {
 
 			PDFRenderer pdfRenderer = new PDFRenderer(document);
-			List<ZipFile> filesToZip = new ArrayList<>();
+			List<FileData> filesToZip = new ArrayList<>();
 
 			int numberOfPages = document.getNumberOfPages();
 			log.info("Start to convert file: {}", oldFileName);
@@ -63,7 +63,7 @@ public class PdfToPngConverter implements Converter {
 		}
 	}
 
-	private void processPdfPage(PDFRenderer pdfRenderer, List<ZipFile> filesToZip, int page)
+	private void processPdfPage(PDFRenderer pdfRenderer, List<FileData> filesToZip, int page)
 			throws IOException, FileException {
 
 		BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
@@ -75,7 +75,7 @@ public class PdfToPngConverter implements Converter {
 
 			String fileName = String.format("pdf-%d.%s", page + 1, imageFormat);
 			byte[] bytes = outputStream.toByteArray();
-			filesToZip.add(new ZipFile(fileName, bytes));
+			filesToZip.add(new FileData(fileName, bytes));
 
 		} catch (Exception e) {
 			log.error("Error while converting PDF file to PNG: {}", e.getMessage());

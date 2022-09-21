@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Getter
-public final class ZipFile {
+public final class FileData {
 
 	private final String name;
 	private final byte[] bytes;
