@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.shared.exception.FileException;
-import pl.marcinm312.filesconverter.shared.model.FileToZip;
+import pl.marcinm312.filesconverter.shared.model.ZipFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -38,17 +38,17 @@ public class FileUtils {
 		return fileName;
 	}
 
-	public static byte[] createZipFile(List<FileToZip> filesToZip) throws FileException {
+	public static byte[] createZipFile(List<ZipFile> filesToZip) throws FileException {
 
 		log.info("Start to create ZIP file");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			 ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
 
-			for (FileToZip fileToZip : filesToZip) {
-				String fileName = fileToZip.getName();
+			for (ZipFile zipFile : filesToZip) {
+				String fileName = zipFile.getName();
 				ZipEntry zipEntry = new ZipEntry(fileName);
 				zipOutputStream.putNextEntry(zipEntry);
-				zipOutputStream.write(fileToZip.getBytes());
+				zipOutputStream.write(zipFile.getBytes());
 				zipOutputStream.closeEntry();
 				log.info("File {} added to ZIP file", fileName);
 			}
