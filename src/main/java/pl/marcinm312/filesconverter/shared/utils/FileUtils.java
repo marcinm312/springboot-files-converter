@@ -12,8 +12,11 @@ import pl.marcinm312.filesconverter.shared.exception.FileException;
 import pl.marcinm312.filesconverter.shared.model.ZipFile;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -59,6 +62,35 @@ public class FileUtils {
 
 		} catch (Exception e) {
 			log.error("Error while generating ZIP file: {}", e.getMessage());
+			throw new FileException(e.getMessage());
+		}
+	}
+
+	public static List<ZipFile> readZipFile(MultipartFile file) throws FileException {
+
+		log.info("Start to read ZIP file");
+		try (InputStream inputStream = file.getInputStream();
+			 ZipInputStream zis = new ZipInputStream(inputStream)) {
+
+			List<ZipFile> zipFiles = new ArrayList<>();
+
+			ZipEntry zipEntry;
+			while ((zipEntry = zis.getNextEntry()) != null) {
+
+				if (zipEntry.isDirectory()) {
+					continue;
+				}
+				String fileName = zipEntry.getName();
+				byte[] bytes = zis.readAllBytes();
+
+				zipFiles.add(new ZipFile(fileName, bytes));
+				log.info("Entry with file {} added to list", fileName);
+			}
+			log.info("ZIP file read");
+			return zipFiles;
+
+		} catch (Exception e) {
+			log.error("Error while reading ZIP file: {}", e.getMessage());
 			throw new FileException(e.getMessage());
 		}
 	}
