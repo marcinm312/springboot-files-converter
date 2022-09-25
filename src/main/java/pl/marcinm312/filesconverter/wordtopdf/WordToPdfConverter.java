@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.shared.Converter;
-import pl.marcinm312.filesconverter.shared.exception.BadRequestException;
 import pl.marcinm312.filesconverter.shared.exception.FileException;
 import pl.marcinm312.filesconverter.shared.utils.FileUtils;
 
@@ -78,17 +77,8 @@ public class WordToPdfConverter implements Converter {
 
 	private void validateFile(MultipartFile file) {
 
-		if (file == null || file.isEmpty()) {
-			log.error("No file selected");
-			throw new BadRequestException("Nie wybrano pliku");
-		}
-
-		String fileName = FileUtils.getFileName(file).toLowerCase();
-
-		if (!(fileName.endsWith(".doc") || fileName.endsWith(".docx"))) {
-			log.error("Incorrect file format");
-			throw new BadRequestException("Nieprawidłowy format pliku");
-		}
+		List<String> allowedExtensions = List.of("doc", "docx");
+		FileUtils.validateFileExtension(file, allowedExtensions);
 	}
 
 	private ResponseEntity<ByteArrayResource> convertMultipartFile(MultipartFile file) throws FileException {

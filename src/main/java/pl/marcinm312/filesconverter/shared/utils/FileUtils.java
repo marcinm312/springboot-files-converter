@@ -3,11 +3,13 @@ package pl.marcinm312.filesconverter.shared.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+import pl.marcinm312.filesconverter.shared.exception.BadRequestException;
 import pl.marcinm312.filesconverter.shared.exception.FileException;
 import pl.marcinm312.filesconverter.shared.model.FileData;
 
@@ -68,6 +70,11 @@ public class FileUtils {
 
 	public static List<FileData> readZipFile(MultipartFile file) throws FileException {
 
+		return readZipFile(file, null);
+	}
+
+	public static List<FileData> readZipFile(MultipartFile file, List<String> allowedExtensions) throws FileException {
+
 		log.info("Start to read ZIP file");
 		try (InputStream inputStream = file.getInputStream();
 			 ZipInputStream zis = new ZipInputStream(inputStream)) {
@@ -77,10 +84,11 @@ public class FileUtils {
 			ZipEntry zipEntry;
 			while ((zipEntry = zis.getNextEntry()) != null) {
 
-				if (zipEntry.isDirectory()) {
+				String fileName = zipEntry.getName();
+				if (zipEntry.isDirectory() ||
+						(allowedExtensions != null && !allowedExtensions.contains(FilenameUtils.getExtension(fileName)))) {
 					continue;
 				}
-				String fileName = zipEntry.getName();
 				byte[] bytes = zis.readAllBytes();
 
 				fileDataList.add(new FileData(fileName, bytes));
@@ -97,7 +105,23 @@ public class FileUtils {
 
 	public static String getFileNameWithNewExtension(String oldFileName, String newExtension) {
 
-		String[] splitFileName = oldFileName.split("\\.");
-		return splitFileName[0].replace("—", "-") + "." + newExtension;
+		return FilenameUtils.removeExtension(oldFileName).replace("—", "-") + "." + newExtension;
+	}
+
+	public static void validateFileExtension(MultipartFile file, List<String> allowedExtensions) {
+
+		if (file == null || file.isEmpty()) {
+			log.error("No file selected");
+			throw new BadRequestException("Nie wybrano pliku");
+		}
+
+		String fileName = FileUtils.getFileName(file).toLowerCase();
+		String extension = FilenameUtils.getExtension(fileName);
+
+		if (!allowedExtensions.contains(extension)) {
+			log.error("Incorrect file format");
+			String allowedExtensionsString = String.join(", ", allowedExtensions);
+			throw new BadRequestException("Nieprawidłowy format pliku. Dozwolone rozszerzenia: " + allowedExtensionsString);
+		}
 	}
 }

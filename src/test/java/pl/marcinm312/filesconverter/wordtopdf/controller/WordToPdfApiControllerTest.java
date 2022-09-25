@@ -79,7 +79,7 @@ class WordToPdfApiControllerTest {
 				.andExpect(status().isBadRequest())
 				.andReturn().getResolvedException()).getMessage();
 
-		Assertions.assertEquals("Nieprawidłowy format pliku", receivedErrorMessage);
+		Assertions.assertEquals("Nieprawidłowy format pliku. Dozwolone rozszerzenia: doc, docx", receivedErrorMessage);
 	}
 
 	@Test

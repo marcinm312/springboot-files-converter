@@ -84,7 +84,7 @@ class WordToPdfWebControllerTest {
 				.andDo(print())
 				.andExpect(status().isBadRequest())
 				.andExpect(view().name("converterPage"))
-				.andExpect(model().attribute("result", "Nieprawidłowy format pliku"));
+				.andExpect(model().attribute("result", "Nieprawidłowy format pliku. Dozwolone rozszerzenia: doc, docx"));
 	}
 
 	@Test
