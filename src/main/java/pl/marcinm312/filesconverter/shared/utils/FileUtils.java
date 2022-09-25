@@ -68,11 +68,6 @@ public class FileUtils {
 		}
 	}
 
-	public static List<FileData> readZipFile(MultipartFile file) throws FileException {
-
-		return readZipFile(file, null);
-	}
-
 	public static List<FileData> readZipFile(MultipartFile file, List<String> allowedExtensions) throws FileException {
 
 		log.info("Start to read ZIP file");
@@ -85,12 +80,14 @@ public class FileUtils {
 			while ((zipEntry = zis.getNextEntry()) != null) {
 
 				String fileName = zipEntry.getName();
-				if (zipEntry.isDirectory() ||
-						(allowedExtensions != null && !allowedExtensions.contains(FilenameUtils.getExtension(fileName)))) {
+				log.info("Processing entry with file: {}", fileName);
+				boolean isCorrectFile = !zipEntry.isDirectory() &&
+						(allowedExtensions == null || allowedExtensions.contains(FilenameUtils.getExtension(fileName).toLowerCase()));
+				if (!isCorrectFile) {
 					continue;
 				}
-				byte[] bytes = zis.readAllBytes();
 
+				byte[] bytes = zis.readAllBytes();
 				fileDataList.add(new FileData(fileName, bytes));
 				log.info("Entry with file {} added to list", fileName);
 			}
