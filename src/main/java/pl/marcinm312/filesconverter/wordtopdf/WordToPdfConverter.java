@@ -24,6 +24,8 @@ import java.util.List;
 @Component
 public class WordToPdfConverter implements Converter {
 
+	private final List<String> allowedExtensions = List.of("doc", "docx");
+
 	private final ToPdfParameterList pdfParameterList;
 
 	public WordToPdfConverter(ResourcePatternResolver resourceResolver) throws IOException {
@@ -76,8 +78,6 @@ public class WordToPdfConverter implements Converter {
 	}
 
 	private void validateFile(MultipartFile file) {
-
-		List<String> allowedExtensions = List.of("doc", "docx");
 		FileUtils.validateFileExtension(file, allowedExtensions);
 	}
 

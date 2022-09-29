@@ -25,6 +25,8 @@ import java.util.List;
 @Component
 public class PdfToPngConverter implements Converter {
 
+	private final List<String> allowedExtensions = List.of("pdf");
+
 	@Override
 	public ResponseEntity<ByteArrayResource> executeConversion(MultipartFile file) throws FileException {
 
@@ -83,8 +85,6 @@ public class PdfToPngConverter implements Converter {
 	}
 
 	private void validateFile(MultipartFile file) {
-
-		List<String> allowedExtensions = List.of("pdf");
 		FileUtils.validateFileExtension(file, allowedExtensions);
 	}
 }

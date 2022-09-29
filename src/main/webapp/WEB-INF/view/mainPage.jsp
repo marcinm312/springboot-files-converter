@@ -24,6 +24,9 @@
                 <button class="btn btn-primary"
                         onclick="window.location.href = 'app/pdfToPng'">PDF -&gt; PNG
                 </button>
+                <button class="btn btn-primary"
+                        onclick="window.location.href = 'app/imagesToPdf'">Obrazy -&gt; PDF
+                </button>
         </div>
 </div>
 </body>
