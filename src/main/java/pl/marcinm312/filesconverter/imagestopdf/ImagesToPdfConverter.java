@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.shared.Converter;
+import pl.marcinm312.filesconverter.shared.exception.BadRequestException;
 import pl.marcinm312.filesconverter.shared.exception.FileException;
 import pl.marcinm312.filesconverter.shared.model.FileData;
 import pl.marcinm312.filesconverter.shared.utils.FileUtils;
@@ -46,9 +47,10 @@ public class ImagesToPdfConverter implements Converter {
 		int numberOfFiles = unzippedFiles.size();
 
 		if (unzippedFiles.isEmpty()) {
-			String allowedExtensionsString = String.join(", ", allowedExtensionsToUnzip);
-			throw new FileException("Plik ZIP musi zawierać przynajmniej jeden plik o następującym rozszerzeniu: " +
-					allowedExtensionsString);
+			String errorMessage = String.format("Plik ZIP musi zawierać przynajmniej jeden plik o następującym rozszerzeniu: %s",
+					String.join(", ", allowedExtensionsToUnzip));
+			log.error(errorMessage);
+			throw new BadRequestException(errorMessage);
 		}
 
 		log.info("Start to convert file: {}", oldFileName);
@@ -69,8 +71,9 @@ public class ImagesToPdfConverter implements Converter {
 			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
 
 		} catch (Exception e) {
-			log.error("Error while converting images to PDF: {}", e.getMessage());
-			throw new FileException(e.getMessage());
+			String errorMessage = String.format("Błąd podczas konwertowania obrazów do pliku PDF: %s", e.getMessage());
+			log.error(errorMessage);
+			throw new FileException(errorMessage);
 		}
 	}
 
@@ -134,8 +137,9 @@ public class ImagesToPdfConverter implements Converter {
 			contentStream.drawImage(image, xMargin, yMargin, imageWidth, imageHeight);
 
 		} catch (Exception e) {
-			log.error("Error while adding image to PDF: {}", e.getMessage());
-			throw new FileException(e.getMessage());
+			String errorMessage = String.format("Błąd podczas dodawania obrazu do pliku PDF: %s", e.getMessage());
+			log.error(errorMessage);
+			throw new FileException(errorMessage);
 		}
 	}
 

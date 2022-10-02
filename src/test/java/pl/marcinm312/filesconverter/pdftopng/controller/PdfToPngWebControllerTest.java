@@ -73,7 +73,7 @@ class PdfToPngWebControllerTest {
 				.andDo(print())
 				.andExpect(status().isBadRequest())
 				.andExpect(view().name("converterPage"))
-				.andExpect(model().attribute("result", "Nieprawidłowy format pliku. Dozwolone rozszerzenia: pdf"));
+				.andExpect(model().attribute("result", "Błąd podczas konwertowania pliku: Nieprawidłowy format pliku. Dozwolone rozszerzenia: pdf"));
 	}
 
 	@Test
@@ -93,6 +93,6 @@ class PdfToPngWebControllerTest {
 				.andDo(print())
 				.andExpect(status().isBadRequest())
 				.andExpect(view().name("converterPage"))
-				.andExpect(model().attribute("result", "Nie wybrano pliku"));
+				.andExpect(model().attribute("result", "Błąd podczas konwertowania pliku: Nie wybrano pliku"));
 	}
 }

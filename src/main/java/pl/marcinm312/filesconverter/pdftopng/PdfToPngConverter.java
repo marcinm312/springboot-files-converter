@@ -49,8 +49,7 @@ public class PdfToPngConverter implements Converter {
 			log.info("Start to convert file: {}", oldFileName);
 
 			for (int page = 0; page < numberOfPages; page++) {
-				processPdfPage(pdfRenderer, filesToZip, page);
-				log.info("Page {} of {} processed", page + 1, numberOfPages);
+				processPdfPage(pdfRenderer, filesToZip, page, numberOfPages);
 			}
 
 			byte[] convertedFile = FileUtils.createZipFile(filesToZip);
@@ -59,14 +58,16 @@ public class PdfToPngConverter implements Converter {
 			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
 
 		} catch (Exception e) {
-			log.error("Error while converting PDF file to PNG: {}", e.getMessage());
-			throw new FileException(e.getMessage());
+			String errorMessage = String.format("Błąd podczas konwertowania pliku PDF do plików PNG: %s", e.getMessage());
+			log.error(errorMessage);
+			throw new FileException(errorMessage);
 		}
 	}
 
-	private void processPdfPage(PDFRenderer pdfRenderer, List<FileData> filesToZip, int page)
+	private void processPdfPage(PDFRenderer pdfRenderer, List<FileData> filesToZip, int page, int numberOfPages)
 			throws IOException, FileException {
 
+		int pageToDisplay = page + 1;
 		BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
 
 		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -74,13 +75,17 @@ public class PdfToPngConverter implements Converter {
 			String imageFormat = "png";
 			ImageIO.write(bufferedImage, imageFormat, outputStream);
 
-			String fileName = String.format("pdf-%d.%s", page + 1, imageFormat);
+			String fileName = String.format("pdf-%d.%s", pageToDisplay, imageFormat);
 			byte[] bytes = outputStream.toByteArray();
 			filesToZip.add(new FileData(fileName, bytes));
 
+			log.info("Page {} of {} processed", pageToDisplay, numberOfPages);
+
 		} catch (Exception e) {
-			log.error("Error while converting PDF file to PNG: {}", e.getMessage());
-			throw new FileException(e.getMessage());
+			String errorMessage = String.format("Błąd podczas przetwarzania %s. strony z pliku PDF " +
+					"zawierającego %s stron: %s", pageToDisplay, numberOfPages, e.getMessage());
+			log.error(errorMessage);
+			throw new FileException(errorMessage);
 		}
 	}
 

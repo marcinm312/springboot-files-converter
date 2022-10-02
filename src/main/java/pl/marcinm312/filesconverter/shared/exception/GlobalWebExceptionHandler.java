@@ -14,11 +14,12 @@ public class GlobalWebExceptionHandler {
 
 	@ExceptionHandler(MultipartException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ModelAndView handleError1(MultipartException e) {
+	public ModelAndView handleError(MultipartException e) {
 
-		log.error(e.getMessage());
+		String errorMessage = String.format("MultipartException: %s", e.getMessage());
+		log.error(errorMessage);
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("result", e.getMessage());
+		modelAndView.addObject("result", errorMessage);
 		modelAndView.setViewName("multipartException");
 		return modelAndView;
 	}

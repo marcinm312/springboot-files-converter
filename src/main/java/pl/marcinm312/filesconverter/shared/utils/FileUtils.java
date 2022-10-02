@@ -63,8 +63,9 @@ public class FileUtils {
 			return byteArrayOutputStream.toByteArray();
 
 		} catch (Exception e) {
-			log.error("Error while generating ZIP file: {}", e.getMessage());
-			throw new FileException(e.getMessage());
+			String errorMessage = String.format("Błąd podczas tworzenia pliku ZIP: %s", e.getMessage());
+			log.error(errorMessage);
+			throw new FileException(errorMessage);
 		}
 	}
 
@@ -95,8 +96,9 @@ public class FileUtils {
 			return fileDataList;
 
 		} catch (Exception e) {
-			log.error("Error while reading ZIP file: {}", e.getMessage());
-			throw new FileException(e.getMessage());
+			String errorMessage = String.format("Błąd podczas odczytywania pliku ZIP: %s", e.getMessage());
+			log.error(errorMessage);
+			throw new FileException(errorMessage);
 		}
 	}
 
@@ -108,17 +110,19 @@ public class FileUtils {
 	public static void validateFileExtension(MultipartFile file, List<String> allowedExtensions) {
 
 		if (file == null || file.isEmpty()) {
-			log.error("No file selected");
-			throw new BadRequestException("Nie wybrano pliku");
+			String errorMessage = "Nie wybrano pliku";
+			log.error(errorMessage);
+			throw new BadRequestException(errorMessage);
 		}
 
 		String fileName = FileUtils.getFileName(file).toLowerCase();
 		String extension = FilenameUtils.getExtension(fileName);
 
 		if (!allowedExtensions.contains(extension)) {
-			log.error("Incorrect file format");
-			String allowedExtensionsString = String.join(", ", allowedExtensions);
-			throw new BadRequestException("Nieprawidłowy format pliku. Dozwolone rozszerzenia: " + allowedExtensionsString);
+			String errorMessage = String.format("Nieprawidłowy format pliku. Dozwolone rozszerzenia: %s",
+					String.join(", ", allowedExtensions));
+			log.error(errorMessage);
+			throw new BadRequestException(errorMessage);
 		}
 	}
 }
