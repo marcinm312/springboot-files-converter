@@ -17,7 +17,7 @@ public class GlobalWebExceptionHandler {
 	public ModelAndView handleError(MultipartException e) {
 
 		String errorMessage = String.format("MultipartException: %s", e.getMessage());
-		log.error(errorMessage);
+		log.error(errorMessage, e);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("result", errorMessage);
 		modelAndView.setViewName("multipartException");

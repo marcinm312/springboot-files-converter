@@ -36,7 +36,7 @@ public abstract class AbstractConverterWebController {
 			return getConverter().executeConversion(file);
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania pliku: %s", e.getMessage());
-			log.error(errorMessage);
+			log.error(errorMessage, e);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			model.addAttribute(RESULT, errorMessage);
 			prepareConverterPage(model);

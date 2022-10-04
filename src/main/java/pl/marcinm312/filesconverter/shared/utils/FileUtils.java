@@ -64,7 +64,7 @@ public class FileUtils {
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas tworzenia pliku ZIP: %s", e.getMessage());
-			log.error(errorMessage);
+			log.error(errorMessage, e);
 			throw new FileException(errorMessage);
 		}
 	}
@@ -97,7 +97,7 @@ public class FileUtils {
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas odczytywania pliku ZIP: %s", e.getMessage());
-			log.error(errorMessage);
+			log.error(errorMessage, e);
 			throw new FileException(errorMessage);
 		}
 	}

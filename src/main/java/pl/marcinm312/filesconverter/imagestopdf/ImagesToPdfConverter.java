@@ -72,7 +72,7 @@ public class ImagesToPdfConverter implements Converter {
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania obrazów do pliku PDF: %s", e.getMessage());
-			log.error(errorMessage);
+			log.error(errorMessage, e);
 			throw new FileException(errorMessage);
 		}
 	}
@@ -105,7 +105,9 @@ public class ImagesToPdfConverter implements Converter {
 		addImageToPage(document, image, originalImageWidth, originalImageHeight, page, pageWidth, pageHeight);
 	}
 
-	private void addImageToPage(PDDocument document, PDImageXObject image, float originalImageWidth, float originalImageHeight, PDPage page, float pageWidth, float pageHeight) throws FileException {
+	private void addImageToPage(PDDocument document, PDImageXObject image, float originalImageWidth,
+								float originalImageHeight, PDPage page, float pageWidth, float pageHeight)
+			throws FileException {
 
 		try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
 			float scale = (pageWidth - (MINIMAL_MARGIN * 2)) / originalImageWidth;
@@ -138,7 +140,7 @@ public class ImagesToPdfConverter implements Converter {
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas dodawania obrazu do pliku PDF: %s", e.getMessage());
-			log.error(errorMessage);
+			log.error(errorMessage, e);
 			throw new FileException(errorMessage);
 		}
 	}

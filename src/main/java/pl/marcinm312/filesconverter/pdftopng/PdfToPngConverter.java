@@ -59,7 +59,7 @@ public class PdfToPngConverter implements Converter {
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania pliku PDF do plików PNG: %s", e.getMessage());
-			log.error(errorMessage);
+			log.error(errorMessage, e);
 			throw new FileException(errorMessage);
 		}
 	}
@@ -84,7 +84,7 @@ public class PdfToPngConverter implements Converter {
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas przetwarzania %s. strony z pliku PDF " +
 					"zawierającego %s stron: %s", pageToDisplay, numberOfPages, e.getMessage());
-			log.error(errorMessage);
+			log.error(errorMessage, e);
 			throw new FileException(errorMessage);
 		}
 	}
