@@ -15,6 +15,8 @@ import pl.marcinm312.filesconverter.shared.model.FileData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -72,8 +74,9 @@ public class FileUtils {
 	public static List<FileData> readZipFile(MultipartFile file, List<String> allowedExtensions) throws FileException {
 
 		log.info("Start to read ZIP file");
+		Charset charset = StandardCharsets.ISO_8859_1;
 		try (InputStream inputStream = file.getInputStream();
-			 ZipInputStream zis = new ZipInputStream(inputStream)) {
+			 ZipInputStream zis = new ZipInputStream(inputStream, charset)) {
 
 			List<FileData> fileDataList = new ArrayList<>();
 
