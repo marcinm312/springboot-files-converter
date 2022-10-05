@@ -110,6 +110,7 @@ public class ImagesToPdfConverter implements Converter {
 			throws FileException {
 
 		try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+
 			float scale = (pageWidth - (MINIMAL_MARGIN * 2)) / originalImageWidth;
 			if (scale > 1) {
 				scale = 1;
