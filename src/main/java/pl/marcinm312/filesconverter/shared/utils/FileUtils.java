@@ -71,11 +71,11 @@ public class FileUtils {
 		}
 	}
 
-	public static List<FileData> readZipFile(MultipartFile file, List<String> allowedExtensions) throws FileException {
+	public static List<FileData> readZipFile(InputStream inputStream, List<String> allowedExtensions) throws FileException {
 
 		log.info("Start to read ZIP file");
 		Charset charset = StandardCharsets.ISO_8859_1;
-		try (InputStream inputStream = file.getInputStream();
+		try (inputStream;
 			 ZipInputStream zis = new ZipInputStream(inputStream, charset)) {
 
 			List<FileData> fileDataList = new ArrayList<>();

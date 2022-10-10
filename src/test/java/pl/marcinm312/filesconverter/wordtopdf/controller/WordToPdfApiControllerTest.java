@@ -1,5 +1,6 @@
 package pl.marcinm312.filesconverter.wordtopdf.controller;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -40,27 +42,34 @@ class WordToPdfApiControllerTest {
 				.andExpect(view().name("multipartException"));
 	}
 
-	@ParameterizedTest(name = "{index} ''{1}''")
+	@ParameterizedTest(name = "{index} ''{2}''")
 	@MethodSource("examplesOfGoodFiles")
-	void convertMultipartFile_correctFiles_fileConverted(String fileName, String nameOfTestCase) throws Exception {
+	void convertMultipartFile_correctFiles_fileConverted(String fileName, int expectedNumberOfPages,
+														 String nameOfTestCase) throws Exception {
 
 		String path = "testfiles" + FileSystems.getDefault().getSeparator() + fileName;
 		byte[] bytes = Files.readAllBytes(Paths.get(path));
 		File file = new File(path);
 		MockMultipartFile multipartFile = new MockMultipartFile("file", file.getName(), null, bytes);
 
-		this.mockMvc.perform(
+		byte[] responseBytes = this.mockMvc.perform(
 						multipart("/api/wordToPdf")
 								.file(multipartFile))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM));
+				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andReturn().getResponse().getContentAsByteArray();
+
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);
+		PDDocument document = PDDocument.load(inputStream);
+		int receivedNumberOfPages = document.getNumberOfPages();
+		Assertions.assertEquals(expectedNumberOfPages, receivedNumberOfPages);
 	}
 
 	private static Stream<Arguments> examplesOfGoodFiles() {
 
 		return Stream.of(
-				Arguments.of("Small_file.docx", "convertMultipartFile_smallDocxFile_fileConverted"),
-				Arguments.of("Small_file.doc", "convertMultipartFile_smallDocFile_fileConverted")
+				Arguments.of("Small_file.docx", 3, "convertMultipartFile_smallDocxFile_fileConverted"),
+				Arguments.of("Small_file.doc", 3, "convertMultipartFile_smallDocFile_fileConverted")
 		);
 	}
 

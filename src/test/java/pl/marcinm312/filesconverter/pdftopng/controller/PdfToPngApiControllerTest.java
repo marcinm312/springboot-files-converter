@@ -8,11 +8,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import pl.marcinm312.filesconverter.shared.model.FileData;
+import pl.marcinm312.filesconverter.shared.utils.FileUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -45,11 +49,18 @@ class PdfToPngApiControllerTest {
 		File file = new File(path);
 		MockMultipartFile multipartFile = new MockMultipartFile("file", file.getName(), null, bytes);
 
-		this.mockMvc.perform(
+		byte[] responseBytes = this.mockMvc.perform(
 						multipart("/api/pdfToPng")
 								.file(multipartFile))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM));
+				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andReturn().getResponse().getContentAsByteArray();
+
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);
+		List<FileData> unzippedFiles = FileUtils.readZipFile(inputStream, null);
+		int receivedFiles = unzippedFiles.size();
+		int expectedFiles = 3;
+		Assertions.assertEquals(expectedFiles, receivedFiles);
 	}
 
 	@Test

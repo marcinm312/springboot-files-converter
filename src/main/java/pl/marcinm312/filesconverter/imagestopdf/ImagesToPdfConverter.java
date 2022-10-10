@@ -18,6 +18,7 @@ import pl.marcinm312.filesconverter.shared.utils.FileUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Slf4j
@@ -43,7 +44,16 @@ public class ImagesToPdfConverter implements Converter {
 		String oldFileName = FileUtils.getFileName(file);
 		log.info("Start to load file: {}", oldFileName);
 
-		List<FileData> unzippedFiles = FileUtils.readZipFile(file, allowedExtensionsToUnzip);
+		InputStream inputStream;
+		try {
+			inputStream = file.getInputStream();
+		} catch (Exception e) {
+			String errorMessage = String.format("Błąd podczas odczytu pliku z żądania: %s", e.getMessage());
+			log.error(errorMessage, e);
+			throw new FileException(errorMessage);
+		}
+
+		List<FileData> unzippedFiles = FileUtils.readZipFile(inputStream, allowedExtensionsToUnzip);
 		int numberOfFiles = unzippedFiles.size();
 
 		if (unzippedFiles.isEmpty()) {

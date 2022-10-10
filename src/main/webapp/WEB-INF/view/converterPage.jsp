@@ -18,11 +18,12 @@
 <div class="wrapper">
         <h1>${title}</h1>
         <form:form method="post" enctype="multipart/form-data">
-            <input type="file" name="file" accept="${acceptedFileTypes}" required/>
+            <input type="file" name="file" accept="${acceptedFileTypes}" onclick="clearResult()" required/>
             <input type="submit" class="btn btn-success" value="Konwertuj!"/>
         </form:form>
-        <p class="message">${result}</p>
+        <p id="result" class="message">${result}</p>
         <button type="button" class="btn btn-danger" onclick="window.location.href = '../..'">Anuluj</button>
 </div>
 </body>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/clearResult.js"></script>
 </html>
