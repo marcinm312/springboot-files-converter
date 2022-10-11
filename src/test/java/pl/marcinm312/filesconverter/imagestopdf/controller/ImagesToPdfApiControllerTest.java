@@ -42,7 +42,7 @@ class ImagesToPdfApiControllerTest {
 	@Test
 	void convertMultipartFile_correctFile_fileConverted() throws Exception {
 
-		String path = "testfiles" + FileSystems.getDefault().getSeparator() + "Images_and_other_files.zip";
+		String path = "testfiles" + FileSystems.getDefault().getSeparator() + "Images_pdfs_and_other_files.zip";
 		byte[] bytes = Files.readAllBytes(Paths.get(path));
 		File file = new File(path);
 		MockMultipartFile multipartFile = new MockMultipartFile("file", file.getName(), null, bytes);
@@ -77,6 +77,24 @@ class ImagesToPdfApiControllerTest {
 				.andReturn().getResolvedException()).getMessage();
 
 		Assertions.assertEquals("Nieprawidłowy format pliku. Dozwolone rozszerzenia: zip", receivedErrorMessage);
+	}
+
+	@Test
+	void convertMultipartFile_incorrectZipFile_errorMessage() throws Exception {
+
+		String path = "testfiles" + FileSystems.getDefault().getSeparator() + "Incorrect_files.zip";
+		byte[] bytes = Files.readAllBytes(Paths.get(path));
+		File file = new File(path);
+		MockMultipartFile multipartFile = new MockMultipartFile("file", file.getName(), null, bytes);
+
+		String receivedErrorMessage = Objects.requireNonNull(this.mockMvc.perform(
+						multipart("/api/imagesToPdf")
+								.file(multipartFile))
+				.andDo(print())
+				.andExpect(status().isBadRequest())
+				.andReturn().getResolvedException()).getMessage();
+
+		Assertions.assertEquals("Plik ZIP musi zawierać przynajmniej jeden plik o następującym rozszerzeniu: jpg, jpeg, tif, tiff, gif, bmp, png", receivedErrorMessage);
 	}
 
 	@Test

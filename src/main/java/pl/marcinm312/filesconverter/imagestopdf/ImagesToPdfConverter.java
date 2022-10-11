@@ -11,14 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.shared.Converter;
-import pl.marcinm312.filesconverter.shared.exception.BadRequestException;
 import pl.marcinm312.filesconverter.shared.exception.FileException;
 import pl.marcinm312.filesconverter.shared.model.FileData;
 import pl.marcinm312.filesconverter.shared.utils.FileUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @Slf4j
@@ -44,24 +42,8 @@ public class ImagesToPdfConverter implements Converter {
 		String oldFileName = FileUtils.getFileName(file);
 		log.info("Start to load file: {}", oldFileName);
 
-		InputStream inputStream;
-		try {
-			inputStream = file.getInputStream();
-		} catch (Exception e) {
-			String errorMessage = String.format("Błąd podczas odczytu pliku z żądania: %s", e.getMessage());
-			log.error(errorMessage, e);
-			throw new FileException(errorMessage);
-		}
-
-		List<FileData> unzippedFiles = FileUtils.readZipFile(inputStream, allowedExtensionsToUnzip);
+		List<FileData> unzippedFiles = FileUtils.readZipFromMultipartFile(file, allowedExtensionsToUnzip);
 		int numberOfFiles = unzippedFiles.size();
-
-		if (unzippedFiles.isEmpty()) {
-			String errorMessage = String.format("Plik ZIP musi zawierać przynajmniej jeden plik o następującym rozszerzeniu: %s",
-					String.join(", ", allowedExtensionsToUnzip));
-			log.error(errorMessage);
-			throw new BadRequestException(errorMessage);
-		}
 
 		log.info("Start to convert file: {}", oldFileName);
 		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -75,6 +57,7 @@ public class ImagesToPdfConverter implements Converter {
 			}
 
 			document.save(outputStream);
+
 			byte[] convertedFile = outputStream.toByteArray();
 			String newFileName = FileUtils.getFileNameWithNewExtension(oldFileName, "pdf");
 			log.info("Converted file: {}", newFileName);

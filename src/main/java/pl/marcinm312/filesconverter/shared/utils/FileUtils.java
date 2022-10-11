@@ -71,6 +71,30 @@ public class FileUtils {
 		}
 	}
 
+	public static List<FileData> readZipFromMultipartFile(MultipartFile file, List<String> allowedExtensionsToUnzip)
+			throws FileException {
+
+		InputStream inputStream;
+		try {
+			inputStream = file.getInputStream();
+		} catch (Exception e) {
+			String errorMessage = String.format("Błąd podczas odczytu pliku z żądania: %s", e.getMessage());
+			log.error(errorMessage, e);
+			throw new FileException(errorMessage);
+		}
+
+		List<FileData> unzippedFiles = readZipFile(inputStream, allowedExtensionsToUnzip);
+
+		if (unzippedFiles.isEmpty()) {
+			String errorMessage = String.format("Plik ZIP musi zawierać przynajmniej jeden plik o następującym rozszerzeniu: %s",
+					String.join(", ", allowedExtensionsToUnzip));
+			log.error(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
+
+		return unzippedFiles;
+	}
+
 	public static List<FileData> readZipFile(InputStream inputStream, List<String> allowedExtensions) throws FileException {
 
 		log.info("Start to read ZIP file");
@@ -118,7 +142,7 @@ public class FileUtils {
 			throw new BadRequestException(errorMessage);
 		}
 
-		String fileName = FileUtils.getFileName(file).toLowerCase();
+		String fileName = getFileName(file).toLowerCase();
 		String extension = FilenameUtils.getExtension(fileName);
 
 		if (!allowedExtensions.contains(extension)) {

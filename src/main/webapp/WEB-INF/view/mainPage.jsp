@@ -27,6 +27,9 @@
                 <button class="btn btn-primary"
                         onclick="window.location.href = 'app/imagesToPdf'">Obrazy -&gt; PDF
                 </button>
+                <button class="btn btn-primary"
+                        onclick="window.location.href = 'app/mergePdf'">Połącz pliki PDF
+                </button>
         </div>
 </div>
 </body>
