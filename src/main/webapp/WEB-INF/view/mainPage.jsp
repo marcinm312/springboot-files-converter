@@ -30,6 +30,9 @@
                 <button class="btn btn-primary"
                         onclick="window.location.href = 'app/mergePdf'">Połącz pliki PDF
                 </button>
+                <button class="btn btn-primary"
+                        onclick="window.location.href = 'app/pdfToTxt'">PDF -&gt; TXT
+                </button>
         </div>
 </div>
 </body>
