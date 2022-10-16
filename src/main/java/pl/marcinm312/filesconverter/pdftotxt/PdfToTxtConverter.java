@@ -42,7 +42,10 @@ public class PdfToTxtConverter implements Converter {
 			String parsedText = pdfTextStripper.getText(document);
 
 			log.info("Start to create TXT file");
-			return createTxtFile(oldFileName, parsedText);
+			byte[] convertedFile = createTxtFile(parsedText);
+			String newFileName = FileUtils.getFileNameWithNewExtension(oldFileName, "txt");
+			log.info("Converted file: {}", newFileName);
+			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania pliku PDF do pliku TXT: %s", e.getMessage());
@@ -51,17 +54,15 @@ public class PdfToTxtConverter implements Converter {
 		}
 	}
 
-	private ResponseEntity<ByteArrayResource> createTxtFile(String oldFileName, String parsedText) throws FileException {
+	private byte[] createTxtFile(String parsedText) throws FileException {
 
 		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			 PrintWriter writer = new PrintWriter(outputStream)) {
 
 			writer.print(parsedText);
+			writer.flush();
 
-			byte[] convertedFile = outputStream.toByteArray();
-			String newFileName = FileUtils.getFileNameWithNewExtension(oldFileName, "txt");
-			log.info("Converted file: {}", newFileName);
-			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
+			return outputStream.toByteArray();
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas zapisu pliku TXT: %s", e.getMessage());
