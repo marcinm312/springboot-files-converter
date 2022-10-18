@@ -13,8 +13,7 @@ import pl.marcinm312.filesconverter.shared.exception.BadRequestException;
 import pl.marcinm312.filesconverter.shared.exception.FileException;
 import pl.marcinm312.filesconverter.shared.model.FileData;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -99,6 +98,13 @@ public class FileUtils {
 
 		log.info("Start to read ZIP file");
 		Charset charset = StandardCharsets.ISO_8859_1;
+
+		int entriesLimit = 5000;
+		int sizeLimit = 250 * 1000000; // 250MB
+		double compressionRatioLimit = 10;
+		int totalSizeArchive = 0;
+		int totalEntryArchive = 0;
+
 		try (inputStream;
 			 ZipInputStream zis = new ZipInputStream(inputStream, charset)) {
 
@@ -107,7 +113,7 @@ public class FileUtils {
 			ZipEntry zipEntry;
 			while ((zipEntry = zis.getNextEntry()) != null) {
 
-				String fileName = zipEntry.getName();
+				String fileName = validateFileName(zipEntry.getName());
 				log.info("Processing entry with file: {}", fileName);
 				boolean isCorrectFile = !zipEntry.isDirectory() &&
 						(allowedExtensions == null || allowedExtensions.contains(FilenameUtils.getExtension(fileName).toLowerCase()));
@@ -115,9 +121,36 @@ public class FileUtils {
 					continue;
 				}
 
-				byte[] bytes = zis.readAllBytes();
-				fileDataList.add(new FileData(fileName, bytes));
-				log.info("Entry with file {} added to list", fileName);
+				try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+					totalEntryArchive ++;
+
+					int nBytes;
+					byte[] buffer = new byte[2048];
+					int totalSizeEntry = 0;
+
+					while((nBytes = zis.read(buffer)) > 0) {
+
+						outputStream.write(buffer, 0, nBytes);
+						totalSizeEntry += nBytes;
+						totalSizeArchive += nBytes;
+
+						double compressionRatio = (double) totalSizeEntry / (double) zipEntry.getCompressedSize();
+						if(compressionRatio > compressionRatioLimit) {
+							// ratio between compressed and uncompressed data is highly suspicious, looks like a Zip Bomb Attack
+							break;
+						}
+					}
+
+					fileDataList.add(new FileData(fileName, outputStream.toByteArray()));
+					log.info("Entry with file {} added to list", fileName);
+				}
+
+				if(totalSizeArchive > sizeLimit || totalEntryArchive > entriesLimit) {
+					// the uncompressed data size is too much for the application resource capacity
+					// too many entries in this archive, can lead to inodes exhaustion of the system
+					break;
+				}
 			}
 			log.info("ZIP file read");
 			return fileDataList;
@@ -126,6 +159,24 @@ public class FileUtils {
 			String errorMessage = String.format("Błąd podczas odczytywania pliku ZIP: %s", e.getMessage());
 			log.error(errorMessage, e);
 			throw new FileException(errorMessage);
+		}
+	}
+
+	private static String validateFileName(String fileName) throws IOException {
+
+		String intendedDir = ".";
+		File f = new File(fileName);
+		String canonicalPath = f.getCanonicalPath();
+
+		File iD = new File(intendedDir);
+		String canonicalID = iD.getCanonicalPath();
+
+		if (canonicalPath.startsWith(canonicalID)) {
+			return fileName;
+		} else {
+			String errorMessage = String.format("File %s is outside extraction target directory", fileName);
+			log.error(errorMessage);
+			throw new IllegalStateException(errorMessage);
 		}
 	}
 
