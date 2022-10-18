@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.shared.Converter;
+import pl.marcinm312.filesconverter.shared.exception.BadRequestException;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,8 +37,12 @@ public abstract class AbstractConverterWebController {
 			return getConverter().executeConversion(file);
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania pliku: %s", e.getMessage());
-			log.error(errorMessage, e);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			log.error(errorMessage);
+			if (e instanceof BadRequestException) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			} else {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			}
 			model.addAttribute(RESULT, errorMessage);
 			prepareConverterPage(model);
 			return CONVERTER_PAGE;
