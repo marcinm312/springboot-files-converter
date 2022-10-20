@@ -176,7 +176,7 @@ public class FileUtils {
 		} else {
 			String errorMessage = String.format("File %s is outside extraction target directory", fileName);
 			log.error(errorMessage);
-			throw new IllegalStateException(errorMessage);
+			throw new BadRequestException(errorMessage);
 		}
 	}
 
