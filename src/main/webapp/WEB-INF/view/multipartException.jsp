@@ -12,12 +12,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
-    <title>Przekroczono dozwolony rozmiar pliku</title>
+    <title>Błąd podczas konwersji</title>
 </head>
 <body>
 <div class="wrapper">
+    <h1>Błąd podczas konwersji</h1>
     <p class="message">${result}</p>
-    <button class="btn btn-primary" onclick="window.location.href = '..'">Wróć</button>
+    <button class="btn btn-primary" onclick="window.location.href = '../..'">Wróć</button>
 </div>
 </body>
 </html>
