@@ -68,9 +68,9 @@ public class MergePdfConverter implements Converter {
 
 	private void processUnzippedFile(PDFMergerUtility pdfMerger, FileData unzippedFile) throws FileException {
 
-		String unzippedFileName = unzippedFile.getName();
+		String unzippedFileName = unzippedFile.name();
 		log.info("Processing PDF file: {}", unzippedFileName);
-		byte[] unzippedFileBytes = unzippedFile.getBytes();
+		byte[] unzippedFileBytes = unzippedFile.bytes();
 
 		try (ByteArrayInputStream inputStream = new ByteArrayInputStream(unzippedFileBytes)) {
 			pdfMerger.addSource(inputStream);
