@@ -51,10 +51,10 @@ public class FileUtils {
 			 ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
 
 			for (FileData fileData : filesToZip) {
-				String fileName = fileData.getName();
+				String fileName = fileData.name();
 				ZipEntry zipEntry = new ZipEntry(fileName);
 				zipOutputStream.putNextEntry(zipEntry);
-				zipOutputStream.write(fileData.getBytes());
+				zipOutputStream.write(fileData.bytes());
 				zipOutputStream.closeEntry();
 				log.info("File {} added to ZIP file", fileName);
 			}

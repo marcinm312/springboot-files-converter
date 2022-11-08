@@ -72,9 +72,9 @@ public class ImagesToPdfConverter implements Converter {
 
 	private void processUnzippedFile(PDDocument document, FileData unzippedFile) throws IOException, FileException {
 
-		String unzippedFileName = unzippedFile.getName();
+		String unzippedFileName = unzippedFile.name();
 		log.info("Processing image from file: {}", unzippedFileName);
-		byte[] unzippedFileBytes = unzippedFile.getBytes();
+		byte[] unzippedFileBytes = unzippedFile.bytes();
 		PDImageXObject image = PDImageXObject.createFromByteArray(document, unzippedFileBytes, unzippedFileName);
 
 		float originalImageWidth = image.getWidth();
