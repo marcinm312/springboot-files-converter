@@ -20,6 +20,11 @@ div.menu * {
     margin: 5px;
 }
 
+input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 @media (max-width: 414px) {
     div.wrapper {
         margin: 15px;
