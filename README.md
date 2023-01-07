@@ -18,7 +18,7 @@ Conversions:
 5. Apache PDFBox Tools
 6. Apache Commons IO
 7. Lombok
-8. JUnit, MockMvc
+8. Spring Boot Starter Test, JUnit, MockMvc
 9. Swagger
 10. HTML, JSP, CSS
 11. Bootstrap
