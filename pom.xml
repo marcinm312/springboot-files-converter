@@ -211,6 +211,7 @@
                         <format>json</format>
                         <format>html</format>
                     </formats>
+                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
                 </configuration>
             </plugin>
         </plugins>
