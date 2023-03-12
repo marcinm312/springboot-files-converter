@@ -38,8 +38,7 @@ class WordToPdfApiControllerTest {
 
 		this.mockMvc.perform(post("/api/wordToPdf"))
 				.andDo(print())
-				.andExpect(status().isBadRequest())
-				.andExpect(view().name("multipartException"));
+				.andExpect(status().isUnsupportedMediaType());
 	}
 
 	@ParameterizedTest(name = "{index} ''{2}''")
