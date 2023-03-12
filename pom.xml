@@ -29,6 +29,9 @@
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
         <sonar.java.source>${java.version}</sonar.java.source>
+
+        <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui -->
+        <springdoc.version>1.6.15</springdoc.version>
     </properties>
 
     <repositories>
@@ -104,11 +107,10 @@
             <version>2.11.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter -->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>3.0.0</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc.version}</version>
         </dependency>
 
     </dependencies>
