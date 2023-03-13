@@ -35,8 +35,7 @@ class MergePdfApiControllerTest {
 
 		this.mockMvc.perform(post("/api/mergePdf"))
 				.andDo(print())
-				.andExpect(status().isBadRequest())
-				.andExpect(view().name("multipartException"));
+				.andExpect(status().isUnsupportedMediaType());
 	}
 
 	@Test

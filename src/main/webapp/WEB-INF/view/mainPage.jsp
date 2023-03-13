@@ -34,7 +34,7 @@
                         onclick="window.location.href = 'app/pdfToTxt'">PDF -&gt; TXT
                 </button>
                 <button class="btn btn-outline-primary"
-                                onclick="window.location.href = 'swagger-ui/'">Dokumentacja API
+                                onclick="window.location.href = 'swagger-ui/index.html'">Dokumentacja API
                 </button>
         </div>
 </div>

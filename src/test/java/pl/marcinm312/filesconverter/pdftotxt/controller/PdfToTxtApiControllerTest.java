@@ -33,8 +33,7 @@ class PdfToTxtApiControllerTest {
 
 		this.mockMvc.perform(post("/api/pdfToTxt"))
 				.andDo(print())
-				.andExpect(status().isBadRequest())
-				.andExpect(view().name("multipartException"));
+				.andExpect(status().isUnsupportedMediaType());
 	}
 
 	@Test

@@ -35,8 +35,7 @@ class ImagesToPdfApiControllerTest {
 
 		this.mockMvc.perform(post("/api/imagesToPdf"))
 				.andDo(print())
-				.andExpect(status().isBadRequest())
-				.andExpect(view().name("multipartException"));
+				.andExpect(status().isUnsupportedMediaType());
 	}
 
 	@Test

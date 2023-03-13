@@ -58,4 +58,4 @@ java -Dfile.encoding=UTF-8 -jar target/files-converter-0.0.1-SNAPSHOT.war
 
 ## API documentation
 After launching the application, the API documentation is available at the URL:
-http://localhost:8080/swagger-ui/
+http://localhost:8080/swagger-ui/index.html
