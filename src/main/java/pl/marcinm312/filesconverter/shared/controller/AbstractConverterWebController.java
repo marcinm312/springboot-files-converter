@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.marcinm312.filesconverter.shared.Converter;
 import pl.marcinm312.filesconverter.shared.exception.BadRequestException;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Slf4j
 public abstract class AbstractConverterWebController {

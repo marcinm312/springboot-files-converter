@@ -19,19 +19,19 @@
         <h1>Wybierz rodzaj konwersji</h1>
         <div class="menu">
                 <button class="btn btn-primary"
-                        onclick="window.location.href = 'app/wordToPdf'">Word -&gt; PDF
+                        onclick="window.location.href = 'app/wordToPdf/'">Word -&gt; PDF
                 </button>
                 <button class="btn btn-primary"
-                        onclick="window.location.href = 'app/pdfToPng'">PDF -&gt; PNG
+                        onclick="window.location.href = 'app/pdfToPng/'">PDF -&gt; PNG
                 </button>
                 <button class="btn btn-primary"
-                        onclick="window.location.href = 'app/imagesToPdf'">Obrazy -&gt; PDF
+                        onclick="window.location.href = 'app/imagesToPdf/'">Obrazy -&gt; PDF
                 </button>
                 <button class="btn btn-primary"
-                        onclick="window.location.href = 'app/mergePdf'">Połącz pliki PDF
+                        onclick="window.location.href = 'app/mergePdf/'">Połącz pliki PDF
                 </button>
                 <button class="btn btn-primary"
-                        onclick="window.location.href = 'app/pdfToTxt'">PDF -&gt; TXT
+                        onclick="window.location.href = 'app/pdfToTxt/'">PDF -&gt; TXT
                 </button>
                 <button class="btn btn-outline-primary"
                                 onclick="window.location.href = 'swagger-ui/index.html'">Dokumentacja API

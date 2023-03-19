@@ -10,7 +10,7 @@ import pl.marcinm312.filesconverter.shared.controller.AbstractConverterWebContro
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-@RequestMapping("/app/pdfToTxt")
+@RequestMapping("/app/pdfToTxt/")
 public class PdfToTxtWebController extends AbstractConverterWebController {
 
 	private static final String PAGE_TITLE = "PDF -> TXT";
