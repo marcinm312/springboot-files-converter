@@ -10,7 +10,7 @@ import pl.marcinm312.filesconverter.shared.controller.AbstractConverterWebContro
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-@RequestMapping("/app/wordToPdf")
+@RequestMapping("/app/wordToPdf/")
 public class WordToPdfWebController extends AbstractConverterWebController {
 
 	private static final String PAGE_TITLE = "Word -> PDF";

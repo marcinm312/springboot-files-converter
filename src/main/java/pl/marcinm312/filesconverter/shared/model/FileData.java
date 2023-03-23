@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public record FileData(String name, byte[] bytes) {
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
