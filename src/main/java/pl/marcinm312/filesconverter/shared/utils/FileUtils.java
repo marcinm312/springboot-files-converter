@@ -18,6 +18,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -47,8 +48,11 @@ public class FileUtils {
 	public static byte[] createZipFile(List<FileData> filesToZip) throws FileException {
 
 		log.info("Start to create ZIP file");
+
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			 ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
+
+			zipOutputStream.setLevel(Deflater.BEST_SPEED);
 
 			for (FileData fileData : filesToZip) {
 				String fileName = fileData.name();
