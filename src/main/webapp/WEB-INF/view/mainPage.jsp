@@ -36,6 +36,9 @@
                 <button class="btn btn-primary"
                          onclick="window.location.href = 'app/jpgToPng/'">JPG -&gt; PNG
                 </button>
+                <button class="btn btn-primary"
+                         onclick="window.location.href = 'app/pngToJpg/'">PNG -&gt; JPG
+                </button>
 
                 <button class="btn btn-outline-primary"
                                 onclick="window.location.href = 'swagger-ui/index.html'">Dokumentacja API
