@@ -48,8 +48,6 @@ public class PdfToPngConverter implements Converter {
 			List<FileData> filesToZip = new ArrayList<>();
 
 			int numberOfPages = document.getNumberOfPages();
-			log.info("Start to convert file: {}", oldFileName);
-
 			for (int page = 0; page < numberOfPages; page++) {
 				processPdfPage(pdfRenderer, filesToZip, page, numberOfPages);
 			}

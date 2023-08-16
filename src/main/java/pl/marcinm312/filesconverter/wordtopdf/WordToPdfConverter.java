@@ -88,7 +88,6 @@ public class WordToPdfConverter implements Converter {
 		try (InputStream inputStream = file.getInputStream();
 			 ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-			log.info("Start to convert file: {}", fileName);
 			byte[] convertedFile = processInputStream(inputStream, outputStream, doc);
 			String newFileName = FileUtils.getFileNameWithNewExtension(fileName, "pdf");
 			log.info("Converted file: {}", newFileName);

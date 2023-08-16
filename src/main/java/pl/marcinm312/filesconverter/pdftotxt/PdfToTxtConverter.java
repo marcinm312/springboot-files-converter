@@ -39,7 +39,6 @@ public class PdfToTxtConverter implements Converter {
 		try (InputStream inputStream = file.getInputStream();
 			 PDDocument document = PDDocument.load(inputStream)) {
 
-			log.info("Start to convert file: {}", oldFileName);
 			PDFTextStripper pdfTextStripper = new PDFTextStripper();
 			String parsedText = pdfTextStripper.getText(document);
 
