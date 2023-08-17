@@ -49,6 +49,7 @@ class PdfToTxtApiControllerTest {
 								.file(multipartFile))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(header().string("Content-Disposition", "attachment; filename=\"Pdf_file.txt\""))
 				.andReturn().getResponse().getContentAsString();
 
 		String textToCheck = "Lorem Ipsum is simply dummy text";

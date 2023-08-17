@@ -4,6 +4,7 @@ import com.spire.doc.Document;
 import com.spire.doc.FileFormat;
 import com.spire.doc.PrivateFontPath;
 import com.spire.doc.ToPdfParameterList;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -24,6 +25,7 @@ import java.util.List;
 @Component
 public class WordToPdfConverter implements Converter {
 
+	@Getter
 	private final List<String> allowedExtensions = List.of("doc", "docx");
 
 	private final ToPdfParameterList pdfParameterList;
@@ -77,10 +79,6 @@ public class WordToPdfConverter implements Converter {
 		return convertMultipartFile(file);
 	}
 
-	private void validateFile(MultipartFile file) {
-		FileUtils.validateFileExtension(file, allowedExtensions);
-	}
-
 	private ResponseEntity<ByteArrayResource> convertMultipartFile(MultipartFile file) throws FileException {
 
 		String fileName = FileUtils.getFileName(file);
@@ -90,7 +88,6 @@ public class WordToPdfConverter implements Converter {
 		try (InputStream inputStream = file.getInputStream();
 			 ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-			log.info("Start to convert file: {}", fileName);
 			byte[] convertedFile = processInputStream(inputStream, outputStream, doc);
 			String newFileName = FileUtils.getFileNameWithNewExtension(fileName, "pdf");
 			log.info("Converted file: {}", newFileName);

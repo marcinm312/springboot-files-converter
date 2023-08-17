@@ -53,6 +53,7 @@ class PdfToPngApiControllerTest {
 								.file(multipartFile))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(header().string("Content-Disposition", "attachment; filename=\"Pdf_file.zip\""))
 				.andReturn().getResponse().getContentAsByteArray();
 
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);

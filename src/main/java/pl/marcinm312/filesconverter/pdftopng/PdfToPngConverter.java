@@ -1,5 +1,6 @@
 package pl.marcinm312.filesconverter.pdftopng;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
@@ -25,6 +26,7 @@ import java.util.List;
 @Component
 public class PdfToPngConverter implements Converter {
 
+	@Getter
 	private final List<String> allowedExtensions = List.of("pdf");
 
 	@Override
@@ -46,8 +48,6 @@ public class PdfToPngConverter implements Converter {
 			List<FileData> filesToZip = new ArrayList<>();
 
 			int numberOfPages = document.getNumberOfPages();
-			log.info("Start to convert file: {}", oldFileName);
-
 			for (int page = 0; page < numberOfPages; page++) {
 				processPdfPage(pdfRenderer, filesToZip, page, numberOfPages);
 			}
@@ -87,9 +87,5 @@ public class PdfToPngConverter implements Converter {
 			log.error(errorMessage, e);
 			throw new FileException(errorMessage);
 		}
-	}
-
-	private void validateFile(MultipartFile file) {
-		FileUtils.validateFileExtension(file, allowedExtensions);
 	}
 }

@@ -1,5 +1,6 @@
 package pl.marcinm312.filesconverter.mergepdf;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
@@ -21,7 +22,9 @@ import java.util.List;
 public class MergePdfConverter implements Converter {
 
 	private final List<String> allowedExtensionsToUnzip = List.of("pdf");
-	private final List<String> allowedExtensionsToRead = List.of("zip");
+
+	@Getter
+	private final List<String> allowedExtensions = List.of("zip");
 
 	private final MemoryUsageSetting memoryUsageSetting = MemoryUsageSetting.setupMainMemoryOnly();
 
@@ -79,9 +82,5 @@ public class MergePdfConverter implements Converter {
 			log.error(errorMessage, e);
 			throw new FileException(errorMessage);
 		}
-	}
-
-	private void validateFile(MultipartFile file) {
-		FileUtils.validateFileExtension(file, allowedExtensionsToRead);
 	}
 }

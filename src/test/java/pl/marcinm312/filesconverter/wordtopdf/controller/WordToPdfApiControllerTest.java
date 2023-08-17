@@ -41,10 +41,10 @@ class WordToPdfApiControllerTest {
 				.andExpect(status().isUnsupportedMediaType());
 	}
 
-	@ParameterizedTest(name = "{index} ''{2}''")
+	@ParameterizedTest
 	@MethodSource("examplesOfGoodFiles")
 	void convertMultipartFile_correctFiles_fileConverted(String fileName, int expectedNumberOfPages,
-														 String nameOfTestCase) throws Exception {
+														 String resultFileName) throws Exception {
 
 		String path = "testfiles" + FileSystems.getDefault().getSeparator() + fileName;
 		byte[] bytes = Files.readAllBytes(Paths.get(path));
@@ -56,6 +56,7 @@ class WordToPdfApiControllerTest {
 								.file(multipartFile))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(header().string("Content-Disposition", "attachment; filename=\"" + resultFileName + "\""))
 				.andReturn().getResponse().getContentAsByteArray();
 
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);
@@ -67,8 +68,8 @@ class WordToPdfApiControllerTest {
 	private static Stream<Arguments> examplesOfGoodFiles() {
 
 		return Stream.of(
-				Arguments.of("Small_file.docx", 3, "convertMultipartFile_smallDocxFile_fileConverted"),
-				Arguments.of("Small_file.doc", 3, "convertMultipartFile_smallDocFile_fileConverted")
+				Arguments.of("Small_file.docx", 3, "Small_file.pdf"),
+				Arguments.of("Small_file.doc", 3, "Small_file.pdf")
 		);
 	}
 

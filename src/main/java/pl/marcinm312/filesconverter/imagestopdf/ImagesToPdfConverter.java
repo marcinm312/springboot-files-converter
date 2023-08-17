@@ -1,5 +1,6 @@
 package pl.marcinm312.filesconverter.imagestopdf;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -24,7 +25,9 @@ import java.util.List;
 public class ImagesToPdfConverter implements Converter {
 
 	private final List<String> allowedExtensionsToUnzip = List.of("jpg", "jpeg", "tif", "tiff", "gif", "bmp", "png");
-	private final List<String> allowedExtensionsToRead = List.of("zip");
+
+	@Getter
+	private final List<String> allowedExtensions = List.of("zip");
 
 	private static final PDRectangle a4Rectangle = PDRectangle.A4;
 	private final PDRectangle a4RotatedRectangle = new PDRectangle(a4Rectangle.getHeight(), a4Rectangle.getWidth());
@@ -139,7 +142,4 @@ public class ImagesToPdfConverter implements Converter {
 		}
 	}
 
-	private void validateFile(MultipartFile file) {
-		FileUtils.validateFileExtension(file, allowedExtensionsToRead);
-	}
 }
