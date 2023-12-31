@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.marcinm312.filesconverter.shared.exception.FileException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -70,8 +69,6 @@ class ImagesToPdfWebControllerTest {
 			int receivedNumberOfPages = document.getNumberOfPages();
 			int expectedNumberOfPages = 7;
 			Assertions.assertEquals(expectedNumberOfPages, receivedNumberOfPages);
-		} catch (Exception e) {
-			throw new FileException(e.getMessage());
 		}
 	}
 
