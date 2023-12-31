@@ -2,7 +2,7 @@ package pl.marcinm312.filesconverter.mergepdf;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pdfbox.io.MemoryUsageSetting;
+import org.apache.pdfbox.io.*;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,7 @@ import pl.marcinm312.filesconverter.shared.utils.FileUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -25,8 +26,6 @@ public class MergePdfConverter implements Converter {
 
 	@Getter
 	private final List<String> allowedExtensions = List.of("zip");
-
-	private final MemoryUsageSetting memoryUsageSetting = MemoryUsageSetting.setupMainMemoryOnly();
 
 	@Override
 	public ResponseEntity<ByteArrayResource> executeConversion(MultipartFile file) throws FileException {
@@ -40,22 +39,18 @@ public class MergePdfConverter implements Converter {
 		log.info("Start to load file: {}", oldFileName);
 
 		List<FileData> unzippedFiles = FileUtils.readZipFromMultipartFile(file, allowedExtensionsToUnzip);
-		int numberOfFiles = unzippedFiles.size();
 
 		log.info("Start to convert file: {}", oldFileName);
+		List<RandomAccessRead> filesToMerge = prepareFilesToMerge(unzippedFiles);
+
 		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
 			PDFMergerUtility pdfMerger = new PDFMergerUtility();
+			pdfMerger.setDocumentMergeMode(PDFMergerUtility.DocumentMergeMode.OPTIMIZE_RESOURCES_MODE);
+			pdfMerger.addSources(filesToMerge);
 			pdfMerger.setDestinationStream(outputStream);
 
-			int i = 0;
-			for (FileData unzippedFile : unzippedFiles) {
-				processUnzippedFile(pdfMerger, unzippedFile);
-				i++;
-				log.info("File {} of {} processed", i, numberOfFiles);
-			}
-
-			pdfMerger.mergeDocuments(memoryUsageSetting);
+			pdfMerger.mergeDocuments(IOUtils.createTempFileOnlyStreamCache());
 
 			byte[] convertedFile = outputStream.toByteArray();
 			String newFileName = FileUtils.getFileNameWithNewExtension(oldFileName, "pdf");
@@ -69,18 +64,26 @@ public class MergePdfConverter implements Converter {
 		}
 	}
 
-	private void processUnzippedFile(PDFMergerUtility pdfMerger, FileData unzippedFile) throws FileException {
+	private List<RandomAccessRead> prepareFilesToMerge(List<FileData> unzippedFiles) throws FileException {
 
-		String unzippedFileName = unzippedFile.name();
-		log.info("Processing PDF file: {}", unzippedFileName);
-		byte[] unzippedFileBytes = unzippedFile.bytes();
+		List<RandomAccessRead> filesToMerge = new ArrayList<>();
+		int numberOfFiles = unzippedFiles.size();
+		int i = 0;
 
-		try (ByteArrayInputStream inputStream = new ByteArrayInputStream(unzippedFileBytes)) {
-			pdfMerger.addSource(inputStream);
-		} catch (Exception e) {
-			String errorMessage = String.format("Błąd podczas przetwarzania pliku PDF: %s", e.getMessage());
-			log.error(errorMessage, e);
-			throw new FileException(errorMessage);
+		for (FileData unzippedFile : unzippedFiles) {
+
+			byte[] unzippedFileBytes = unzippedFile.bytes();
+			try (ByteArrayInputStream inputStream = new ByteArrayInputStream(unzippedFileBytes)) {
+				RandomAccessReadBuffer buffer = RandomAccessReadBuffer.createBufferFromStream(inputStream);
+				filesToMerge.add(buffer);
+			} catch (Exception e) {
+				String errorMessage = String.format("Błąd podczas przetwarzania pliku PDF: %s", e.getMessage());
+				log.error(errorMessage, e);
+				throw new FileException(errorMessage);
+			}
+			i++;
+			log.info("File {} of {} processed", i, numberOfFiles);
 		}
+		return filesToMerge;
 	}
 }

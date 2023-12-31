@@ -1,5 +1,6 @@
 package pl.marcinm312.filesconverter.wordtopdf.controller;
 
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import pl.marcinm312.filesconverter.shared.exception.FileException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -59,10 +61,13 @@ class WordToPdfApiControllerTest {
 				.andExpect(header().string("Content-Disposition", "attachment; filename=\"" + resultFileName + "\""))
 				.andReturn().getResponse().getContentAsByteArray();
 
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);
-		PDDocument document = PDDocument.load(inputStream);
-		int receivedNumberOfPages = document.getNumberOfPages();
-		Assertions.assertEquals(expectedNumberOfPages, receivedNumberOfPages);
+		try (ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);
+			 PDDocument document = Loader.loadPDF(inputStream.readAllBytes())) {
+			int receivedNumberOfPages = document.getNumberOfPages();
+			Assertions.assertEquals(expectedNumberOfPages, receivedNumberOfPages);
+		} catch (Exception e) {
+			throw new FileException(e.getMessage());
+		}
 	}
 
 	private static Stream<Arguments> examplesOfGoodFiles() {
