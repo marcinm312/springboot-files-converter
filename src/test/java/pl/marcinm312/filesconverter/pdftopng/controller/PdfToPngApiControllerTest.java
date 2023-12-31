@@ -56,11 +56,12 @@ class PdfToPngApiControllerTest {
 				.andExpect(header().string("Content-Disposition", "attachment; filename=\"Pdf_file.zip\""))
 				.andReturn().getResponse().getContentAsByteArray();
 
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);
-		List<FileData> unzippedFiles = FileUtils.readZipFile(inputStream, null);
-		int receivedFiles = unzippedFiles.size();
-		int expectedFiles = 3;
-		Assertions.assertEquals(expectedFiles, receivedFiles);
+		try (ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes)) {
+			List<FileData> unzippedFiles = FileUtils.readZipFile(inputStream, null);
+			int receivedFiles = unzippedFiles.size();
+			int expectedFiles = 3;
+			Assertions.assertEquals(expectedFiles, receivedFiles);
+		}
 	}
 
 	@Test
