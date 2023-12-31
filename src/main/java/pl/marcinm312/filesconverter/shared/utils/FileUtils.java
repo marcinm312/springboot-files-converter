@@ -27,13 +27,13 @@ import java.util.zip.ZipOutputStream;
 @Slf4j
 public class FileUtils {
 
-	public static ResponseEntity<ByteArrayResource> generateResponseWithFile(byte[] bytes, String fileName) {
+	public static ResponseEntity<ByteArrayResource> generateResponseWithFile(byte[] bytes, String fileName,
+																			 String mimeType) {
 
-		ByteArrayResource resource = new ByteArrayResource(bytes);
 		return ResponseEntity.ok().contentLength(bytes.length)
-				.contentType(MediaType.parseMediaType("application/octet-stream"))
+				.contentType(MediaType.parseMediaType(mimeType))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-				.body(resource);
+				.body(new ByteArrayResource(bytes));
 	}
 
 	public static String getFileName(MultipartFile multipartFile) {

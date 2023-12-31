@@ -56,7 +56,7 @@ public class PdfToPngConverter implements Converter {
 			byte[] convertedFile = FileUtils.createZipFile(filesToZip);
 			String newFileName = FileUtils.getFileNameWithNewExtension(oldFileName, "zip");
 			log.info("Converted file: {}", newFileName);
-			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
+			return FileUtils.generateResponseWithFile(convertedFile, newFileName, "application/zip");
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania pliku PDF do plików PNG: %s", e.getMessage());

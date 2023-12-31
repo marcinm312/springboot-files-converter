@@ -47,7 +47,7 @@ class JpgToPngApiControllerTest {
 						multipart("/api/jpgToPng")
 								.file(multipartFile))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(content().contentType(MediaType.IMAGE_PNG))
 				.andExpect(header().string("Content-Disposition", "attachment; filename=\"big_photo_vertical.png\""));
 	}
 

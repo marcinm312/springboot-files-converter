@@ -56,7 +56,7 @@ class WordToPdfApiControllerTest {
 						multipart("/api/wordToPdf")
 								.file(multipartFile))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(content().contentType(MediaType.APPLICATION_PDF))
 				.andExpect(header().string("Content-Disposition", "attachment; filename=\"" + resultFileName + "\""))
 				.andReturn().getResponse().getContentAsByteArray();
 

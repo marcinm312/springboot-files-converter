@@ -56,7 +56,7 @@ class PngToJpgWebControllerTest {
 						multipart("/app/pngToJpg/")
 								.file(multipartFile))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(content().contentType(MediaType.IMAGE_JPEG))
 				.andExpect(header().string("Content-Disposition", "attachment; filename=\"Wielkopolskie_mapa_fizyczna.jpg\""));
 	}
 

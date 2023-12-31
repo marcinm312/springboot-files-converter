@@ -47,7 +47,7 @@ public class PdfToTxtConverter implements Converter {
 			byte[] convertedFile = createTxtFile(parsedText);
 			String newFileName = FileUtils.getFileNameWithNewExtension(oldFileName, "txt");
 			log.info("Converted file: {}", newFileName);
-			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
+			return FileUtils.generateResponseWithFile(convertedFile, newFileName, "text/plain");
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania pliku PDF do pliku TXT: %s", e.getMessage());

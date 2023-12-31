@@ -64,7 +64,7 @@ public class ImagesToPdfConverter implements Converter {
 			byte[] convertedFile = outputStream.toByteArray();
 			String newFileName = FileUtils.getFileNameWithNewExtension(oldFileName, "pdf");
 			log.info("Converted file: {}", newFileName);
-			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
+			return FileUtils.generateResponseWithFile(convertedFile, newFileName, "application/pdf");
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania obrazów do pliku PDF: %s", e.getMessage());

@@ -60,7 +60,7 @@ class MergePdfWebControllerTest {
 						multipart("/app/mergePdf/")
 								.file(multipartFile))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(content().contentType(MediaType.APPLICATION_PDF))
 				.andExpect(header().string("Content-Disposition", "attachment; filename=\"Images_pdfs_and_other_files.pdf\""))
 				.andReturn().getResponse().getContentAsByteArray();
 
