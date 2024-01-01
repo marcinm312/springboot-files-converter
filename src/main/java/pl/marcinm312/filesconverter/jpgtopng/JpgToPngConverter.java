@@ -43,7 +43,7 @@ public class JpgToPngConverter implements Converter {
 			byte[] convertedFile = createPngFile(bufferedImage);
 			String newFileName = FileUtils.getFileNameWithNewExtension(oldFileName, "png");
 			log.info("Converted file: {}", newFileName);
-			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
+			return FileUtils.generateResponseWithFile(convertedFile, newFileName, "image/png");
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania pliku JPG do pliku PNG: %s", e.getMessage());

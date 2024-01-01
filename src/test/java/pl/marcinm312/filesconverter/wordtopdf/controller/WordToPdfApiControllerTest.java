@@ -1,5 +1,6 @@
 package pl.marcinm312.filesconverter.wordtopdf.controller;
 
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -55,14 +56,15 @@ class WordToPdfApiControllerTest {
 						multipart("/api/wordToPdf")
 								.file(multipartFile))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(content().contentType(MediaType.APPLICATION_PDF))
 				.andExpect(header().string("Content-Disposition", "attachment; filename=\"" + resultFileName + "\""))
 				.andReturn().getResponse().getContentAsByteArray();
 
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);
-		PDDocument document = PDDocument.load(inputStream);
-		int receivedNumberOfPages = document.getNumberOfPages();
-		Assertions.assertEquals(expectedNumberOfPages, receivedNumberOfPages);
+		try (ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);
+			 PDDocument document = Loader.loadPDF(inputStream.readAllBytes())) {
+			int receivedNumberOfPages = document.getNumberOfPages();
+			Assertions.assertEquals(expectedNumberOfPages, receivedNumberOfPages);
+		}
 	}
 
 	private static Stream<Arguments> examplesOfGoodFiles() {

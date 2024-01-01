@@ -57,7 +57,7 @@ class PdfToTxtWebControllerTest {
 						multipart("/app/pdfToTxt/")
 								.file(multipartFile))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(content().contentType(MediaType.TEXT_PLAIN))
 				.andExpect(header().string("Content-Disposition", "attachment; filename=\"Pdf_file.txt\""))
 				.andReturn().getResponse().getContentAsString();
 

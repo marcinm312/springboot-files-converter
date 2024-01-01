@@ -52,15 +52,16 @@ class PdfToPngApiControllerTest {
 						multipart("/api/pdfToPng")
 								.file(multipartFile))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(content().contentType(MediaType.parseMediaType("application/zip")))
 				.andExpect(header().string("Content-Disposition", "attachment; filename=\"Pdf_file.zip\""))
 				.andReturn().getResponse().getContentAsByteArray();
 
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);
-		List<FileData> unzippedFiles = FileUtils.readZipFile(inputStream, null);
-		int receivedFiles = unzippedFiles.size();
-		int expectedFiles = 3;
-		Assertions.assertEquals(expectedFiles, receivedFiles);
+		try (ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes)) {
+			List<FileData> unzippedFiles = FileUtils.readZipFile(inputStream, null);
+			int receivedFiles = unzippedFiles.size();
+			int expectedFiles = 3;
+			Assertions.assertEquals(expectedFiles, receivedFiles);
+		}
 	}
 
 	@Test

@@ -91,7 +91,7 @@ public class WordToPdfConverter implements Converter {
 			byte[] convertedFile = processInputStream(inputStream, outputStream, doc);
 			String newFileName = FileUtils.getFileNameWithNewExtension(fileName, "pdf");
 			log.info("Converted file: {}", newFileName);
-			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
+			return FileUtils.generateResponseWithFile(convertedFile, newFileName, "application/pdf");
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania pliku Word do formatu PDF: %s", e.getMessage());

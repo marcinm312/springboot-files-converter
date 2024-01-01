@@ -2,6 +2,7 @@ package pl.marcinm312.filesconverter.pdftopng;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -42,7 +43,7 @@ public class PdfToPngConverter implements Converter {
 		log.info("Start to load file: {}", oldFileName);
 
 		try (InputStream inputStream = file.getInputStream();
-			 PDDocument document = PDDocument.load(inputStream)) {
+			 PDDocument document = Loader.loadPDF(inputStream.readAllBytes())) {
 
 			PDFRenderer pdfRenderer = new PDFRenderer(document);
 			List<FileData> filesToZip = new ArrayList<>();
@@ -55,7 +56,7 @@ public class PdfToPngConverter implements Converter {
 			byte[] convertedFile = FileUtils.createZipFile(filesToZip);
 			String newFileName = FileUtils.getFileNameWithNewExtension(oldFileName, "zip");
 			log.info("Converted file: {}", newFileName);
-			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
+			return FileUtils.generateResponseWithFile(convertedFile, newFileName, "application/zip");
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania pliku PDF do plików PNG: %s", e.getMessage());

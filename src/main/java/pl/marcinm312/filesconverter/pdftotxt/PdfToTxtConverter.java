@@ -2,6 +2,7 @@ package pl.marcinm312.filesconverter.pdftotxt;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.core.io.ByteArrayResource;
@@ -37,7 +38,7 @@ public class PdfToTxtConverter implements Converter {
 		log.info("Start to load file: {}", oldFileName);
 
 		try (InputStream inputStream = file.getInputStream();
-			 PDDocument document = PDDocument.load(inputStream)) {
+			 PDDocument document = Loader.loadPDF(inputStream.readAllBytes())) {
 
 			PDFTextStripper pdfTextStripper = new PDFTextStripper();
 			String parsedText = pdfTextStripper.getText(document);
@@ -46,7 +47,7 @@ public class PdfToTxtConverter implements Converter {
 			byte[] convertedFile = createTxtFile(parsedText);
 			String newFileName = FileUtils.getFileNameWithNewExtension(oldFileName, "txt");
 			log.info("Converted file: {}", newFileName);
-			return FileUtils.generateResponseWithFile(convertedFile, newFileName);
+			return FileUtils.generateResponseWithFile(convertedFile, newFileName, "text/plain");
 
 		} catch (Exception e) {
 			String errorMessage = String.format("Błąd podczas konwertowania pliku PDF do pliku TXT: %s", e.getMessage());

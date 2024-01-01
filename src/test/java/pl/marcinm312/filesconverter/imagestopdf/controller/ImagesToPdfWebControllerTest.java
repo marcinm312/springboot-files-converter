@@ -1,5 +1,6 @@
 package pl.marcinm312.filesconverter.imagestopdf.controller;
 
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -59,15 +60,16 @@ class ImagesToPdfWebControllerTest {
 						multipart("/app/imagesToPdf/")
 								.file(multipartFile))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(content().contentType(MediaType.APPLICATION_PDF))
 				.andExpect(header().string("Content-Disposition", "attachment; filename=\"Images_pdfs_and_other_files.pdf\""))
 				.andReturn().getResponse().getContentAsByteArray();
 
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);
-		PDDocument document = PDDocument.load(inputStream);
-		int receivedNumberOfPages = document.getNumberOfPages();
-		int expectedNumberOfPages = 7;
-		Assertions.assertEquals(expectedNumberOfPages, receivedNumberOfPages);
+		try (ByteArrayInputStream inputStream = new ByteArrayInputStream(responseBytes);
+			 PDDocument document = Loader.loadPDF(inputStream.readAllBytes())) {
+			int receivedNumberOfPages = document.getNumberOfPages();
+			int expectedNumberOfPages = 7;
+			Assertions.assertEquals(expectedNumberOfPages, receivedNumberOfPages);
+		}
 	}
 
 	@Test
