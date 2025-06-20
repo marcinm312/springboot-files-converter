@@ -24,9 +24,12 @@ Conversions:
 11. Bootstrap
 
 ## Environment variables that need to be set:
-1. **LOGGING_FILE_NAME** - Log file path and name. Names can be an exact location (for instance, `C://logs/server.log`) or relative (for instance, `logs/server.log`) to the current directory (project root directory or directory containing packaged war/jar file). You can set an empty value ("" or " " - without quotes) when using only console logs (without saving logs to a file).
-2. **TIME_ZONE** - Time zone, for instance `Europe/Warsaw`.
-3. **MAX_FILE_SIZE** - Max request or file size. Value example: `100MB`.
+
+|         Name          | Description                                                                                                                                                                                                                                                                                                                                                       |                 Example value                 |  Default value  |
+|:---------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------:|:---------------:|
+| **LOGGING_FILE_NAME** | Log file path and name. Names can be an exact location (for instance, `C://logs/server.log`) or relative (for instance, `logs/server.log`) to the current directory (project root directory or directory containing packaged war/jar file). You can set an empty value ("" or " " - without quotes) when using only console logs (without saving logs to a file). | `logs/server.log`, `C://logs/server.log`, ` ` |                 |
+|     **TIME_ZONE**     | Time zone                                                                                                                                                                                                                                                                                                                                                         |                `Europe/Warsaw`                | `Europe/Warsaw` |
+|   **MAX_FILE_SIZE**   | Max request or file size                                                                                                                                                                                                                                                                                                                                          |                    `100MB`                    |     `100MB`     |
 
 ## Steps to Setup
 
