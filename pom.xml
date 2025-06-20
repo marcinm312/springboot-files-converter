@@ -69,7 +69,7 @@
             <artifactId>tomcat-embed-jasper</artifactId>
         </dependency>
 
-        <!-- https://central.sonatype.com/artifact/org.glassfish.web/jakarta.servlet.jsp.jstl/3.0.1 -->
+        <!-- https://central.sonatype.com/artifact/org.glassfish.web/jakarta.servlet.jsp.jstl -->
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>jakarta.servlet.jsp.jstl</artifactId>
