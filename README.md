@@ -2,7 +2,7 @@
 
 This application allows you to convert different file formats.
 
-## Functions:
+## Functionalities:
 Conversions:
 1. Word (DOC, DOCX) -> PDF;
 2. PDF -> PNG (ZIP file containing several PNG files);
