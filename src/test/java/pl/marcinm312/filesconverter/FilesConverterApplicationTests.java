@@ -8,6 +8,7 @@ class FilesConverterApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//Checking Spring context
 	}
 
 }

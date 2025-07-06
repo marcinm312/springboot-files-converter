@@ -25,6 +25,12 @@ input {
     margin-bottom: 5px;
 }
 
+input.input-file {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 600px;
+}
+
 @media (max-width: 414px) {
     div.wrapper {
         margin: 15px;
