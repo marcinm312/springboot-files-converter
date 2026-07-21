@@ -17,7 +17,8 @@
 <div class="wrapper">
         <h1>${title}</h1>
         <form:form method="post" enctype="multipart/form-data">
-            <input type="file" class="form-control input-file" name="file" accept="${acceptedFileTypes}" onclick="clearResult()" required/>
+            <label for="file-input" class="visually-hidden">Plik</label>
+            <input id="file-input" type="file" class="form-control input-file" name="file" accept="${acceptedFileTypes}" onclick="clearResult()" required/>
             <input type="submit" class="btn btn-success" value="Konwertuj!"/>
         </form:form>
         <p id="result" class="message">${result}</p>
