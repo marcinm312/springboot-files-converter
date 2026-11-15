@@ -80,8 +80,8 @@ public class ImagesToPdfConverter implements Converter {
 		byte[] unzippedFileBytes = unzippedFile.bytes();
 		PDImageXObject image = PDImageXObject.createFromByteArray(document, unzippedFileBytes, unzippedFileName);
 
-		float originalImageWidth = image.getWidth();
-		float originalImageHeight = image.getHeight();
+		int originalImageWidth = image.getWidth();
+		int originalImageHeight = image.getHeight();
 
 		PDPage page;
 		float pageWidth;
@@ -101,8 +101,8 @@ public class ImagesToPdfConverter implements Converter {
 		addImageToPage(document, image, originalImageWidth, originalImageHeight, page, pageWidth, pageHeight);
 	}
 
-	private void addImageToPage(PDDocument document, PDImageXObject image, float originalImageWidth,
-								float originalImageHeight, PDPage page, float pageWidth, float pageHeight)
+	private void addImageToPage(PDDocument document, PDImageXObject image, int originalImageWidth,
+								int originalImageHeight, PDPage page, float pageWidth, float pageHeight)
 			throws FileException {
 
 		try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
